@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django',  # Nome do banco de dados
+        'NAME': 'ne_control',  # Nome do banco de dados
         'USER': 'root',  # Seu usuário do MySQL
         'PASSWORD': 'Adminbone@#$',  # Sua senha do MySQL
         'HOST': 'localhost',  # Ou o IP/hostname do servidor do banco de dados
@@ -125,3 +125,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Para o sistema customizado de login/usuario.
+AUTH_USER_MODEL = 'usuarios.Usuario'
