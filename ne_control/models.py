@@ -37,17 +37,34 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
 
 
-# class note_ne(models.Model): # NE.
-#     cod_ne = models.CharField(max_length=50, primary_key=True)
+# Por enquanto fazer com o nome da seção, porém verificar se vai ser isso ou o nome do militar, ou tlvz os dois.
+class Responsible(models.Model):
+    name = models.CharField(max_length=200)
 
-#     # cod_ne chave primaria
-#     # pi
-#     # nd
-#     # a liquidar
-#     # a pagar
-#     # total apagar
-#     # responsavel
-#     # cod fornecedor chave estrangeira
+    def __str__(self):
+        return self.name
+
+
+# Unica tabela com campos em portugues por conta do esquema csv.
+class NoteNE(models.Model): # NE.
+    cod_ne = models.CharField(max_length=50, primary_key=True)
+    ug = models.IntegerField()
+    pi = models.FloatField()
+    nd = models.IntegerField()
+    dias = models.IntegerField()
+    a_liquidar = models.DecimalField(max_digits=10, decimal_places=2)
+    liquidado_pagar = models.DecimalField(max_digits=10, decimal_places=2)
+    total_pagar = models.DecimalField(max_digits=10, decimal_places=2)
+    pago = models.DecimalField(max_digits=10, decimal_places=2)
+    responsavel = models.ForeignKey(Responsible, on_delete=models.SET_NULL, null=True)
+    data_contato = models.DateField()
+
+    def __str__(self):
+        return self.cod_ne
+
+    class Meta:
+        verbose_name = "Note NE"
+        verbose_name_plural = "Notes NE"
 
 
 # class action_taken(models.Model): # Medida tomada.

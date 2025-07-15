@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detalhes da Nota de Empenho</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 p-6">
+  <div class="max-w-5xl mx-auto space-y-8">
+
+    <!-- Seção 1: Informações da Nota de Empenho -->
+    <section class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-xl font-bold mb-4">Nota de Empenho - Detalhes</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+        <div><span class="font-semibold">UG:</span> 110001</div>
+        <div><span class="font-semibold">PI:</span> 20.123.001</div>
+        <div><span class="font-semibold">ND:</span> 339030</div>
+        <div><span class="font-semibold">NE:</span> 2025NE0001</div>
+        <div><span class="font-semibold">Dias:</span> 15</div>
+        <div><span class="font-semibold">A Liquidar:</span> R$ 2.000,00</div>
+        <div><span class="font-semibold">Liquidado a Pagar:</span> R$ 500,00</div>
+        <div><span class="font-semibold">Total a Pagar:</span> R$ 2.500,00</div>
+        <div><span class="font-semibold">Pago:</span> R$ 1.000,00</div>
+        <div><span class="font-semibold">Responsável:</span> João Silva</div>
+      </div>
+    </section>
+
+    <!-- Seção 1.5: Informações da Nota de Empenho -->
+    <section class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-xl font-bold mb-4">Fornecedor - Informações</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-1 text-sm">
+        <div><span class="font-semibold">CNPJ:</span> 1100012222/02</div>
+        <div><span class="font-semibold">NOME:</span> NOME FANTASIA EMPRESA</div>
+        <div><span class="font-semibold">ENDEREÇO:</span> RUA TAL, 0000, BAIRO TAL, CIDADE TAL - ESTADO</div>
+      </div>
+    </section>
+
+    <!-- Seção 2: Histórico de Medidas -->
+    <section class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-xl font-bold mb-4">Histórico de Medidas Tomadas</h2>
+      <div class="overflow-auto">
+        <table class="w-full text-sm border border-gray-200">
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="px-4 py-2 border">Data</th>
+              <th class="px-4 py-2 border">Responsável</th>
+              <th class="px-4 py-2 border">Previsão de Entrega</th>
+              <th class="px-4 py-2 border">Medida Tomada</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-2 border">2025-07-01</td>
+              <td class="px-4 py-2 border">João Silva</td>
+              <td class="px-4 py-2 border">2025-07-10</td>
+              <td class="px-4 py-2 border">Ligação para fornecedor</td>
+            </tr>
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-2 border">2025-07-05</td>
+              <td class="px-4 py-2 border">Maria Oliveira</td>
+              <td class="px-4 py-2 border">2025-07-20</td>
+              <td class="px-4 py-2 border">Envio de e-mail de cobrança</td>
+            </tr>
+            <!-- Mais registros podem ser adicionados aqui -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Seção 3: Formulário para nova medida -->
+    <section class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-xl font-bold mb-4">Registrar Nova Medida Tomada</h2>
+      <form class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+        <div>
+          <label class="block font-medium mb-1">Data</label>
+          <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Responsável</label>
+          <input type="text" placeholder="Nome" class="w-full border border-gray-300 rounded px-3 py-2" />
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Previsão de Entrega</label>
+          <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block font-medium mb-1">Medida Tomada</label>
+          <textarea rows="3" placeholder="Descreva a medida..." class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+        </div>
+        <div class="sm:col-span-2">
+          <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+            Concluir
+          </button>
+        </div>
+      </form>
+    </section>
+
+  </div>
+</body>
+</html>
