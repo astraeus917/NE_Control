@@ -37,34 +37,34 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
 
 
-class note_ne(models.Model): # NE.
-    cod_ne = models.CharField(max_length=50, primary_key=True)
+# class note_ne(models.Model): # NE.
+#     cod_ne = models.CharField(max_length=50, primary_key=True)
 
-    # cod_ne chave primaria
-    # pi
-    # nd
-    # a liquidar
-    # a pagar
-    # total apagar
-    # responsavel
-    # cod fornecedor chave estrangeira
-
-
-class action_taken(models.Model): # Medida tomada.
-    cod_ne = models.CharField(max_length=200)
-    # cod_ne chave estrangeira
-    # data
-    # responsavel chave estrangeira
-    # previsão_data
-    # descrição
+#     # cod_ne chave primaria
+#     # pi
+#     # nd
+#     # a liquidar
+#     # a pagar
+#     # total apagar
+#     # responsavel
+#     # cod fornecedor chave estrangeira
 
 
-class supplier(models.Model): # Fornecedor.
-    cod_ne = models.CharField(max_length=200)
-    # cod_fornecedor
-    # cnpj
-    # nome
-    # endereço? verificar se eh preciso o endereço
+# class action_taken(models.Model): # Medida tomada.
+#     cod_ne = models.CharField(max_length=200)
+#     # cod_ne chave estrangeira
+#     # data
+#     # responsavel chave estrangeira
+#     # previsão_data
+#     # descrição
+
+
+# class supplier(models.Model): # Fornecedor.
+#     cod_ne = models.CharField(max_length=200)
+#     # cod_fornecedor
+#     # cnpj
+#     # nome
+#     # endereço? verificar se eh preciso o endereço
 
 
 

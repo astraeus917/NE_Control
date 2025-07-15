@@ -75,14 +75,22 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ne_control',  # Nome do banco de dados
-        'USER': 'root',  # Seu usuário do MySQL
-        'PASSWORD': 'Adminbone@#$',  # Sua senha do MySQL
-        'HOST': 'localhost',  # Ou o IP/hostname do servidor do banco de dados
-        'PORT': '3306',  # Porta padrão do MySQL
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
+
+# Configuração para usar com o MySQL do Xampp.
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ne_control',  # Nome do banco de dados
+#         'USER': 'root',  # Seu usuário do MySQL
+#         'PASSWORD': '',  # Sua senha do MySQL
+#         'HOST': 'localhost',  # Ou o IP/hostname do servidor do banco de dados
+#         'PORT': '3306',  # Porta padrão do MySQL
+#     }
+# }
 
 
 # Password validation
@@ -127,4 +135,4 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Para o sistema customizado de login/usuario.
-AUTH_USER_MODEL = 'usuarios.Usuario'
+AUTH_USER_MODEL = 'ne_control.User'
