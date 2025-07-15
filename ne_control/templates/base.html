@@ -5,9 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Style.css -->
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
-<body>
+<body class="bg-gray-100 p-6">
     {% block content %}{% endblock %}
 </body>
 </html>
