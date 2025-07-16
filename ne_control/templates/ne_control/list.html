@@ -6,56 +6,58 @@
 
 {% block content %}
 
-<div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
+<div class="p-6">
+    <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
 
-    <!-- Cabeçalho, Pesquisar e Adicionar Nota -->
-    <div class="mb-4 flex flex-col md:flex-row justify-between gap-4">
-        <input type="text" placeholder="Pesquisar NE ou Responsável..."
-            class="border border-gray-300 rounded-lg px-4 py-2 w-full md:w-1/3" />
-        <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-            Adicionar Nota
-        </button>
+        <!-- Cabeçalho, Pesquisar e Adicionar Nota -->
+        <div class="mb-4 flex flex-col md:flex-row justify-between gap-4">
+            <input type="text" placeholder="Pesquisar NE ou Responsável..."
+                class="border border-gray-300 rounded-lg px-4 py-2 w-full md:w-1/3" />
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                Adicionar Nota
+            </button>
+        </div>
+
+        <!-- Menu da lista das NEs -->
+        <table class="min-w-full text-sm text-left border border-gray-300">
+            <!-- Campos da lista. -->
+            <thead class="bg-gray-200 text-gray-700">
+                <tr>
+                    <th class="px-4 py-2 border">UG</th>
+                    <th class="px-4 py-2 border">PI</th>
+                    <th class="px-4 py-2 border">ND</th>
+                    <th class="px-4 py-2 border">NE</th>
+                    <th class="px-4 py-2 border">DIAS</th>
+                    <th class="px-4 py-2 border">A LIQUIDAR</th>
+                    <th class="px-4 py-2 border">LIQUIDADO A PAGAR</th>
+                    <th class="px-4 py-2 border">TOTAL A PAGAR</th>
+                    <th class="px-4 py-2 border">PAGO</th>
+                    <th class="px-4 py-2 border">RESPONSÁVEL</th>
+                    <th class="px-4 py-2 border">DATA CONTATO</th>
+                    <th class="px-4 py-2 border">HISTÓRICO MEDIDAS</th>
+                </tr>
+            </thead>
+
+            <!-- Informações da lista. -->
+            <tbody>
+                {% for note_ne in notes_ne %}
+                <tr class="hover:bg-gray-100">
+                    <td class="px-4 py-2 border">{{ note_ne.ug }}</td>
+                    <td class="px-4 py-2 border">{{ note_ne.pi }}</td>
+                    <td class="px-4 py-2 border">{{ note_ne.nd }}</td>
+                    <td class="px-4 py-2 border">{{ note_ne.cod_ne }}</td>
+                    <td class="px-4 py-2 border">{{ note_ne.dias }}</td>
+                    <td class="px-4 py-2 border">{{ note_ne.a_liquidar|brl }}</td>
+                    <td class="px-4 py-2 border">{{ note_ne.liquidado_pagar|brl }}</td>
+                    <td class="px-4 py-2 border">{{ note_ne.total_pagar|brl }}</td>
+                    <td class="px-4 py-2 border">{{ note_ne.pago|brl }}</td>
+                    <td class="px-4 py-2 border">{{ note_ne.responsavel }}</td>
+                    <td class="px-4 py-2 border">{{ note_ne.data_contato }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-
-    <!-- Menu da lista das NEs -->
-    <table class="min-w-full text-sm text-left border border-gray-300">
-        <!-- Campos da lista. -->
-        <thead class="bg-gray-200 text-gray-700">
-            <tr>
-                <th class="px-4 py-2 border">UG</th>
-                <th class="px-4 py-2 border">PI</th>
-                <th class="px-4 py-2 border">ND</th>
-                <th class="px-4 py-2 border">NE</th>
-                <th class="px-4 py-2 border">DIAS</th>
-                <th class="px-4 py-2 border">A LIQUIDAR</th>
-                <th class="px-4 py-2 border">LIQUIDADO A PAGAR</th>
-                <th class="px-4 py-2 border">TOTAL A PAGAR</th>
-                <th class="px-4 py-2 border">PAGO</th>
-                <th class="px-4 py-2 border">RESPONSÁVEL</th>
-                <th class="px-4 py-2 border">DATA CONTATO</th>
-                <th class="px-4 py-2 border">HISTÓRICO MEDIDAS</th>
-            </tr>
-        </thead>
-
-        <!-- Informações da lista. -->
-        <tbody>
-            {% for note_ne in notes_ne %}
-            <tr class="hover:bg-gray-100">
-                <td class="px-4 py-2 border">{{ note_ne.ug }}</td>
-                <td class="px-4 py-2 border">{{ note_ne.pi }}</td>
-                <td class="px-4 py-2 border">{{ note_ne.nd }}</td>
-                <td class="px-4 py-2 border">{{ note_ne.cod_ne }}</td>
-                <td class="px-4 py-2 border">{{ note_ne.dias }}</td>
-                <td class="px-4 py-2 border">{{ note_ne.a_liquidar|brl }}</td>
-                <td class="px-4 py-2 border">{{ note_ne.liquidado_pagar|brl }}</td>
-                <td class="px-4 py-2 border">{{ note_ne.total_pagar|brl }}</td>
-                <td class="px-4 py-2 border">{{ note_ne.pago|brl }}</td>
-                <td class="px-4 py-2 border">{{ note_ne.responsavel }}</td>
-                <td class="px-4 py-2 border">{{ note_ne.data_contato }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 </div>
 
 {% endblock %}

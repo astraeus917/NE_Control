@@ -4,17 +4,19 @@
 
 {% block content %}
 
-<div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
+<div class="p-6">
+    <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
 
-        <input type="file" name="csv_file" accept=".csv" required class="mb-4">
+            <input type="file" name="csv_file" accept=".csv" required class="mb-4">
 
-        <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-            Impotar CSV
-        </button>
-    </form>
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                Impotar CSV
+            </button>
+        </form>
+    </div>
 </div>
 
 {% endblock %}
