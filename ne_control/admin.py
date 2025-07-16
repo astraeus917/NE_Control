@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Responsible, NoteNE
+from .models import NoteNE
 
-admin.site.register(Responsible)
 admin.site.register(NoteNE)
 

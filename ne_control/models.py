@@ -1,12 +1,12 @@
 from django.db import models
-
+from django.conf import settings
 
 # Por enquanto fazer com o nome da seção, porém verificar se vai ser isso ou o nome do militar, ou tlvz os dois.
-class Responsible(models.Model):
-    name = models.CharField(max_length=200)
+# class Responsible(models.Model):
+#     name = models.CharField(max_length=200)
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 
 # Unica tabela com campos em portugues por conta do esquema csv.
@@ -20,7 +20,8 @@ class NoteNE(models.Model): # NE.
     liquidado_pagar = models.DecimalField(max_digits=10, decimal_places=2)
     total_pagar = models.DecimalField(max_digits=10, decimal_places=2)
     pago = models.DecimalField(max_digits=10, decimal_places=2)
-    responsavel = models.ForeignKey(Responsible, on_delete=models.SET_NULL, null=True)
+    # responsavel = models.ForeignKey(Responsible, on_delete=models.SET_NULL, null=True)
+    responsavel = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     data_contato = models.CharField(max_length=10)
 
     def __str__(self):

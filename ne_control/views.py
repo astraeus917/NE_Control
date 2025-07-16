@@ -1,7 +1,7 @@
 import csv
 import io
 from django.shortcuts import render, redirect
-from .models import NoteNE, Responsible
+from .models import NoteNE
 from decimal import Decimal
 
 def parse_brl(value):
@@ -33,9 +33,9 @@ def index(request):
             # Codigo para buscar o responsavel no csv.
             # responsavel_nome = row["responsavel"].strip()
 
-            responsavel_name = 'Gestão'
+            # responsavel_name = 'Gestão'
             # Ele busca o responsavel no Banco de Dados e cria se não existir.
-            responsavel_obj, _ = Responsible.objects.get_or_create(name=responsavel_name)
+            # responsavel_obj, _ = Responsible.objects.get_or_create(name=responsavel_name)
 
             # Atualiza ou cria a NE.
             # Verificar necessidade de apagar NE se ela estiver fora do csv.
@@ -50,7 +50,7 @@ def index(request):
                     "liquidado_pagar": parse_brl(row["LIQUIDADO A PAGAR"]),
                     "total_pagar": parse_brl(row["TOTAL A PAGAR"]),
                     "pago": parse_brl(row["PAGO"]),
-                    "responsavel": responsavel_obj,
+                    "responsavel": None,
                     "data_contato": row["DATA"], # esta como CharField e não como DataField.
                 }
             )
