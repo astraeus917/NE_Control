@@ -1,11 +1,11 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
-
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     return render(request, 'accounts/index.html')
 
-
+@login_required
 def register(request):
     return render(request, 'accounts/register.html')
 
@@ -24,6 +24,13 @@ def login_view(request):
             return render(request, 'index.html', {'error': 'Usuário ou senha inválidos'})
 
     return render(request, 'index.html')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+
 
 
 

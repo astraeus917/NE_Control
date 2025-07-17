@@ -1,5 +1,6 @@
 import csv
 import io
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import NoteNE
 from decimal import Decimal
@@ -9,13 +10,18 @@ def parse_brl(value):
     return Decimal(value.replace(".", "").replace(",", "."))
 
 
+@login_required
 def list(request):
     notes_ne = NoteNE.objects.all()
     return render(request, 'ne_control/list.html', {'notes_ne': notes_ne})
 
+
+@login_required
 def show(request):
     return render(request, 'ne_control/show.html')
 
+
+@login_required
 def index(request):
     if request.method == "POST" and request.FILES.get("csv_file"):
         csv_file = request.FILES["csv_file"]
