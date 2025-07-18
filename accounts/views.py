@@ -1,6 +1,8 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout as site_logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from .forms import RegistroForm
+
 
 def index(request):
     return render(request, 'accounts/index.html')
@@ -10,7 +12,7 @@ def register(request):
     return render(request, 'accounts/register.html')
 
 
-def login_view(request):
+def access_login(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -26,8 +28,19 @@ def login_view(request):
     return render(request, 'index.html')
 
 
-def logout_view(request):
-    logout(request)
+def register_user(request):
+    if request.method == 'POST':
+        form = RegistroForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = RegistroForm()
+    return render(request, 'accounts/register.html', {'form': form})
+
+
+def logout(request):
+    site_logout(request)
     return redirect('login')
 
 

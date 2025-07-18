@@ -1,13 +1,50 @@
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Registro{% endblock %}
 
 {% block content %}
 
-<div>
-    <h1>Register</h1>
+<div class="flex items-center justify-center min-h-screen overflow-hidden">
+    <div class="w-full max-w-sm p-6 bg-white rounded-xl shadow-md">
+        <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Registrar Usuário</h2>
+
+        <form method="POST" action="{% url 'register_user' %}">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="text-red-500 text-sm mb-4">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <!-- Nome de Usuário/Seção -->
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
+                <input type="text" name="username" id="username" required
+                    class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Senha -->
+            <div class="mb-6">
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                <input type="password" name="password1" id="password1" required
+                    class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Repetir Senha -->
+            <div class="mb-6">
+                <label for="password2" class="block text-sm font-medium text-gray-700 mb-1">Confirme a Senha</label>
+                <input type="password" name="password2" id="password2" required
+                    class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Registrar -->
+            <button type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md">
+                Acessar
+            </button>
+        </form>
+    </div>
 </div>
 
 {% endblock %}
-
-
