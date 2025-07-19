@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, get_user_model, logout
-from .forms import LoginForm
+from django.contrib.auth.decorators import login_required
+from .forms import LoginForm, RegisterForm
 
 # Seta o modelo do Usuario, modelo personalizado criado no models.
 User = get_user_model()
@@ -25,9 +26,28 @@ def login_user(request):
 
     return render(request, 'accounts/login.html', {'form': form})
 
-
+@login_required
 def register_user(request):
-    return render(request, 'accounts/register.html')
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            confirm_password = form.cleaned_data['confirm_password']
+
+            if password != confirm_password:
+                form.add_error(None, "As senhas não coincidem")
+            else:
+                if User.objects.filter(username=username).exists():
+                    form.add_error(None, "Este nome de usuário já existe!")
+                else:
+                    user = User.objects.create_user(username=username, password=password)
+                    return redirect('login')
+    
+    else:
+        form = RegisterForm()
+
+    return render(request, 'accounts/register.html', {'form': form})
 
 
 def logout_user(request):
