@@ -31,14 +31,15 @@ class NoteNE(models.Model): # NE.
         verbose_name = "Note NE"
         verbose_name_plural = "Notes NE"
 
+class ActionTaken(models.Model): # Medida tomada.
+    cod_ne = models.ForeignKey(NoteNE, on_delete=models.CASCADE, related_name='actions_taken')
+    date = models.DateField()
+    responsible = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    previ_date = models.DateField()
+    description = models.TextField()
 
-# class action_taken(models.Model): # Medida tomada.
-#     cod_ne = models.CharField(max_length=200)
-#     # cod_ne chave estrangeira
-#     # data
-#     # responsavel chave estrangeira
-#     # previsão_data
-#     # descrição
+    def __str__(self):
+        return self.description[:50] + '...'
 
 
 # class supplier(models.Model): # Fornecedor.

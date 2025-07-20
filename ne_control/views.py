@@ -1,8 +1,8 @@
 import csv
 import io
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from .models import NoteNE
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import NoteNE, ActionTaken
 from decimal import Decimal
 
 def parse_brl(value):
@@ -12,23 +12,28 @@ def parse_brl(value):
 
 @login_required
 def list(request):
-    notes_ne = NoteNE.objects.all()
+    notes_ne = NoteNE.objects.prefetch_related('actions_taken')
     return render(request, 'ne_control/list.html', {'notes_ne': notes_ne})
 
 
 @login_required
-def show(request):
-    return render(request, 'ne_control/show.html')
+def show(request, pk):
+    note_ne = get_object_or_404(NoteNE, pk=pk)
+    
+    # tbm pode ser usado related_name, para um codigo mais reutilizavel e organizado, porem sem tanto controle.
+    action_taken = ActionTaken.objects.filter(cod_ne=note_ne)
+
+    return render(request, 'ne_control/show.html', {'note_ne': note_ne, 'action_taken': action_taken})
 
 
 @login_required
-def index(request):
+def import_csv(request):
     if request.method == "POST" and request.FILES.get("csv_file"):
         csv_file = request.FILES["csv_file"]
 
         # Verifica se um arquivo .csv foi anexado para importação.
         if not csv_file.name.endswith(".csv"):
-            return render(request, "ne_control/index.html", {"error": "Arquivo inválido."})
+            return render(request, "ne_control/import.html", {"error": "Arquivo inválido."})
 
         # Faz a leitura do .csv para importar pro Banco de Dados.
         decoded_file = csv_file.read().decode("utf-8-sig")
@@ -63,7 +68,7 @@ def index(request):
 
         return redirect("list")  # Redireciona para a lista de NEs.
 
-    return render(request, "ne_control/index.html")
+    return render(request, "ne_control/import.html")
 
 
 
