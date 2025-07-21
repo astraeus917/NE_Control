@@ -17,10 +17,10 @@
             <div><span class="font-semibold">ND:</span> {{ note_ne.nd }}</div>
             <div><span class="font-semibold">NE:</span> {{ note_ne.cod_ne }}</div>
             <div><span class="font-semibold">Dias:</span> {{ note_ne.dias }}</div>
-            <div><span class="font-semibold">A Liquidar:</span> {{ note_ne.a_liquidar }}</div>
-            <div><span class="font-semibold">Liquidado a Pagar:</span> {{ note_ne.liquidado_pagar }}</div>
-            <div><span class="font-semibold">Total a Pagar:</span> {{ note_ne.total_pagar }}</div>
-            <div><span class="font-semibold">Pago:</span> {{ note_ne.pago }}</div>
+            <div><span class="font-semibold">A Liquidar:</span> R$ {{ note_ne.a_liquidar|brl }}</div>
+            <div><span class="font-semibold">Liquidado a Pagar:</span> R$ {{ note_ne.liquidado_pagar|brl }}</div>
+            <div><span class="font-semibold">Total a Pagar:</span> R$ {{ note_ne.total_pagar|brl }}</div>
+            <div><span class="font-semibold">Pago:</span> R$ {{ note_ne.pago|brl }}</div>
             <div><span class="font-semibold">Responsável:</span> {{ note_ne.responsavel }}</div>
         </div>
     </section>
@@ -51,9 +51,9 @@
                 <tbody>
                     {% for action in action_taken %}
                     <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-2 border">{{ action.date }}</td>
+                        <td class="px-4 py-2 border">{{ action.date|br_date }}</td>
                         <td class="px-4 py-2 border">{{ action.responsible }}</td>
-                        <td class="px-4 py-2 border">{{ action.previ_date }}</td>
+                        <td class="px-4 py-2 border">{{ action.previ_date|br_date }}</td>
                         <td class="px-4 py-2 border">{{ action.description }}</td>
                     </tr>
                     {% empty %}
@@ -69,29 +69,18 @@
     <!-- Seção 3: Formulário para nova medida -->
     <section class="bg-white rounded-2xl shadow p-6">
         <h2 class="text-xl font-bold mb-4">Registrar Nova Medida Tomada</h2>
-        <form class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-            <div>
-                <label class="block font-medium mb-1">Data</label>
-                <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
-            </div>
-            <div>
-                <label class="block font-medium mb-1">Responsável</label>
-                <input type="text" placeholder="Nome" class="w-full border border-gray-300 rounded px-3 py-2" />
-            </div>
-            <div>
-                <label class="block font-medium mb-1">Previsão de Entrega</label>
-                <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
-            </div>
-            <div class="sm:col-span-2">
-                <label class="block font-medium mb-1">Medida Tomada</label>
-                <textarea rows="3" placeholder="Descreva a medida..."
-                    class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
-            </div>
-            <div class="sm:col-span-2">
-                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
-                    Concluir
-                </button>
-            </div>
+        <form method="POST">
+            {% csrf_token %}
+
+            {% if from.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <div>
+                        <p class="text-red-700">{{ error }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            
         </form>
     </section>
 

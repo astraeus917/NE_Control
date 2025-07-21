@@ -67,9 +67,9 @@
                 {% if action %}
                 <tr id="measure-{{ forloop.counter }}" class="hidden hover:bg-gray-100">
                     <td colspan="3" class="px-6 py-4 border">Responsável: {{ action.responsible }}</td>
-                    <td colspan="1" class="px-6 py-4 border">Data Contato: {{ action.date }}</td>
+                    <td colspan="1" class="px-6 py-4 border">Data Contato: {{ action.date|br_date }}</td>
                     <td colspan="2" class="px-6 py-4 border">Medida Tomada: {{ action.description }}</td>
-                    <td colspan="3" class="px-6 py-4 border">Previsão Entrega: {{ action.previ_date }}</td>
+                    <td colspan="3" class="px-6 py-4 border">Previsão Entrega: {{ action.previ_date|br_date }}</td>
                     <td colspan="3" class="px-6 py-4 border">
                         <ul>
                             <li>
