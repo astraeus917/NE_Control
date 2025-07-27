@@ -8,7 +8,6 @@ from django.conf import settings
 #     def __str__(self):
 #         return self.name
 
-
 # Unica tabela com campos em portugues por conta do esquema csv.
 class NoteNE(models.Model): # NE.
     cod_ne = models.CharField(max_length=50, primary_key=True)
@@ -48,6 +47,5 @@ class ActionTaken(models.Model): # Medida tomada.
 #     # cnpj
 #     # nome
 #     # endereço? verificar se eh preciso o endereço
-
 
 

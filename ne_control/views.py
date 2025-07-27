@@ -3,7 +3,9 @@ import io
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import NoteNE, ActionTaken
+from .forms import ActionTakenForm
 from decimal import Decimal
+
 
 def parse_brl(value):
     """Converte valor em formato brasileiro para Decimal."""
@@ -19,16 +21,39 @@ def list(request):
 @login_required
 def show(request, pk):
     note_ne = get_object_or_404(NoteNE, pk=pk)
-    
+
     # tbm pode ser usado related_name, para um codigo mais reutilizavel e organizado, porem sem tanto controle.
     action_taken = ActionTaken.objects.filter(cod_ne=note_ne)
 
-    return render(request, 'ne_control/show.html', {'note_ne': note_ne, 'action_taken': action_taken})
+    if request.method == 'POST':
+        form = ActionTakenForm(request.POST)
+        if form.is_valid():
+            cod_ne = note_ne
+            date = form.cleaned_data['date']
+            responsible = request.user
+            previ_date = form.cleaned_data['previ_date']
+            description = form.cleaned_data['description']
+
+            ActionTaken.objects.create(
+                cod_ne=cod_ne,
+                date=date,
+                responsible=responsible,
+                previ_date=previ_date,
+                description=description
+            )
+
+        else:
+            form.add_error(None, "Erro ao cadastrar medida.")
+
+    else:
+        form = ActionTakenForm()
+
+    return render(request, 'ne_control/show.html', {'note_ne': note_ne, 'action_taken': action_taken, 'form': form})
 
 
 @login_required
 def import_csv(request):
-    if request.method == "POST" and request.FILES.get("csv_file"):
+    if request.method == 'POST' and request.FILES.get("csv_file"):
         csv_file = request.FILES["csv_file"]
 
         # Verifica se um arquivo .csv foi anexado para importação.

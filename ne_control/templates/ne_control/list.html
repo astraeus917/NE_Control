@@ -73,7 +73,7 @@
                     <td colspan="3" class="px-6 py-4 border">
                         <ul>
                             <li>
-                                <a href="#"
+                                <a href="{% url 'show' note_ne.cod_ne %}#action_form"
                                     class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
                                     Cadastrar nova medida
                                 </a>
@@ -91,6 +91,10 @@
                 <tr id="measure-{{ forloop.counter }}" class="hidden hover:bg-gray-100">
                     <td colspan="12" class="px-6 py-4 text-gray-500 border text-center">
                         Nenhuma medida registrada.
+                        <a href="{% url 'show' note_ne.cod_ne %}#action_form"
+                            class="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                            Cadastrar nova medida
+                        </a>
                     </td>
                 </tr>
                 {% endif %}

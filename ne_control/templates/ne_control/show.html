@@ -6,84 +6,105 @@
 
 {% block content %}
 
-<div class="max-w-5xl mx-auto space-y-8">
+<div class="p-6">
+    <div class="max-w-5xl mx-auto space-y-8">
 
-    <!-- Seção 1: Informações da Nota de Empenho -->
-    <section class="bg-white rounded-2xl shadow p-6">
-        <h2 class="text-xl font-bold mb-4">Nota de Empenho - Detalhes</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-            <div><span class="font-semibold">UG:</span> {{ note_ne.ug }}</div>
-            <div><span class="font-semibold">PI:</span> {{ note_ne.pi }}</div>
-            <div><span class="font-semibold">ND:</span> {{ note_ne.nd }}</div>
-            <div><span class="font-semibold">NE:</span> {{ note_ne.cod_ne }}</div>
-            <div><span class="font-semibold">Dias:</span> {{ note_ne.dias }}</div>
-            <div><span class="font-semibold">A Liquidar:</span> R$ {{ note_ne.a_liquidar|brl }}</div>
-            <div><span class="font-semibold">Liquidado a Pagar:</span> R$ {{ note_ne.liquidado_pagar|brl }}</div>
-            <div><span class="font-semibold">Total a Pagar:</span> R$ {{ note_ne.total_pagar|brl }}</div>
-            <div><span class="font-semibold">Pago:</span> R$ {{ note_ne.pago|brl }}</div>
-            <div><span class="font-semibold">Responsável:</span> {{ note_ne.responsavel }}</div>
-        </div>
-    </section>
+        <!-- Seção 1: Informações da Nota de Empenho -->
+        <section class="bg-white rounded-2xl shadow p-6">
+            <h2 class="text-xl font-bold mb-4">Nota de Empenho - Detalhes</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                <div><span class="font-semibold">UG:</span> {{ note_ne.ug }}</div>
+                <div><span class="font-semibold">PI:</span> {{ note_ne.pi }}</div>
+                <div><span class="font-semibold">ND:</span> {{ note_ne.nd }}</div>
+                <div><span class="font-semibold">NE:</span> {{ note_ne.cod_ne }}</div>
+                <div><span class="font-semibold">Dias:</span> {{ note_ne.dias }}</div>
+                <div><span class="font-semibold">A Liquidar:</span> R$ {{ note_ne.a_liquidar|brl }}</div>
+                <div><span class="font-semibold">Liquidado a Pagar:</span> R$ {{ note_ne.liquidado_pagar|brl }}</div>
+                <div><span class="font-semibold">Total a Pagar:</span> R$ {{ note_ne.total_pagar|brl }}</div>
+                <div><span class="font-semibold">Pago:</span> R$ {{ note_ne.pago|brl }}</div>
+                <div><span class="font-semibold">Responsável:</span> {{ note_ne.responsavel }}</div>
+            </div>
+        </section>
 
-    <!-- Seção 1.5: Informações da Nota de Empenho -->
-    <section class="bg-white rounded-2xl shadow p-6">
-        <h2 class="text-xl font-bold mb-4">Fornecedor - Informações</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-1 text-sm">
-            <div><span class="font-semibold">CNPJ:</span> 1100012222/02</div>
-            <div><span class="font-semibold">NOME:</span> NOME FANTASIA EMPRESA</div>
-            <div><span class="font-semibold">ENDEREÇO:</span> RUA TAL, 0000, BAIRO TAL, CIDADE TAL - ESTADO</div>
-        </div>
-    </section>
+        <!-- Seção 1.5: Informações da Nota de Empenho -->
+        <section class="bg-white rounded-2xl shadow p-6">
+            <h2 class="text-xl font-bold mb-4">Fornecedor - Informações</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-1 text-sm">
+                <div><span class="font-semibold">CNPJ:</span> 1100012222/02</div>
+                <div><span class="font-semibold">NOME:</span> NOME FANTASIA EMPRESA</div>
+                <div><span class="font-semibold">ENDEREÇO:</span> RUA TAL, 0000, BAIRO TAL, CIDADE TAL - ESTADO</div>
+            </div>
+        </section>
 
-    <!-- Seção 2: Histórico de Medidas -->
-    <section class="bg-white rounded-2xl shadow p-6">
-        <h2 class="text-xl font-bold mb-4">Histórico de Medidas Tomadas</h2>
-        <div class="overflow-auto">
-            <table class="w-full text-sm border border-gray-200">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="px-4 py-2 border">Data</th>
-                        <th class="px-4 py-2 border">Responsável</th>
-                        <th class="px-4 py-2 border">Previsão de Entrega</th>
-                        <th class="px-4 py-2 border">Medida Tomada</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for action in action_taken %}
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-2 border">{{ action.date|br_date }}</td>
-                        <td class="px-4 py-2 border">{{ action.responsible }}</td>
-                        <td class="px-4 py-2 border">{{ action.previ_date|br_date }}</td>
-                        <td class="px-4 py-2 border">{{ action.description }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td>Nenumm</td>
-                    </tr>
+        <!-- Seção 2: Histórico de Medidas -->
+        <section class="bg-white rounded-2xl shadow p-6">
+            <h2 class="text-xl font-bold mb-4">Histórico de Medidas Tomadas</h2>
+            <div class="overflow-auto">
+                <table class="w-full text-sm border border-gray-200">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="px-4 py-2 border">Data</th>
+                            <th class="px-4 py-2 border">Responsável</th>
+                            <th class="px-4 py-2 border">Previsão de Entrega</th>
+                            <th class="px-4 py-2 border">Medida Tomada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for action in action_taken %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-2 border">{{ action.date|br_date }}</td>
+                            <td class="px-4 py-2 border">{{ action.responsible }}</td>
+                            <td class="px-4 py-2 border">{{ action.previ_date|br_date }}</td>
+                            <td class="px-4 py-2 border">{{ action.description }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td class="px-6 py-4 text-gray-500 border text-center">Nenhuma medida registrada.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Seção 3: Formulário para nova medida -->
+        <section id="action_form" class="bg-white rounded-2xl shadow p-6">
+            <h2 class="text-xl font-bold mb-4">Registrar Nova Medida Tomada</h2>
+            <form method="POST" class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div>
+                            <p class="text-red-700">{{ error }}</p>
+                        </div>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
+                {% endif %}
 
-    <!-- Seção 3: Formulário para nova medida -->
-    <section class="bg-white rounded-2xl shadow p-6">
-        <h2 class="text-xl font-bold mb-4">Registrar Nova Medida Tomada</h2>
-        <form method="POST">
-            {% csrf_token %}
+                <div>
+                    <label for="{{ form.date.id_for_label }}" class="block font-medium mb-1">Data</label>
+                    {{ form.date }}
+                </div>
 
-            {% if from.non_field_errors %}
-                {% for error in form.non_field_errors %}
-                    <div>
-                        <p class="text-red-700">{{ error }}</p>
-                    </div>
-                {% endfor %}
-            {% endif %}
+                <div>
+                    <label for="{{ form.previ_date.id_for_label }}" class="block font-medium mb-1">Previsão de Entrega</label>
+                    {{ form.previ_date }}
+                </div>
 
-            
-        </form>
-    </section>
+                <div class="sm:col-span-2">
+                    <label for="{{ form.description.id_for_label }}" class="block font-medium mb-1">Medida Tomada</label>
+                    {{ form.description }}
+                </div>
 
+                <div class="sm:col-span-2">
+                    <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+                        Concluir
+                    </button>
+                </div>
+            </form>
+        </section>
+
+    </div>
 </div>
 
 {% endblock %}
