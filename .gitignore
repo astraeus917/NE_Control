@@ -71,4 +71,4 @@ pip-sync.log
 # Other common temporary files
 *.tmp
 
-database/
+
