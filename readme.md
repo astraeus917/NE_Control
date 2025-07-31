@@ -53,6 +53,6 @@ Existem três tipos principais de empenho:
     python manage.py runserver
 
 ## 📄 Licença
-Este projeto está sob a licença MIT – veja o arquivo [CC-BY-NC-SA-4.0] para mais detalhes.
+Este projeto está sob a licença CC-BY-NC-SA-4.0 – veja o arquivo [CC-BY-NC-SA-4.0](CC-BY-NC-SA-4.0) para mais detalhes.
 
 
