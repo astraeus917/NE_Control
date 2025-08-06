@@ -99,7 +99,6 @@
                 </tr>
                 {% endif %}
                 {% endwith %}
-
                 {% endfor %}
             </tbody>
         </table>
@@ -120,15 +119,15 @@
 
     // Função do pesquisar.
     document.getElementById("search").addEventListener("input", function () {
-        const termo = this.value.toLowerCase();
-        const linhas = document.querySelectorAll(".table-line");
+        const term = this.value.toLowerCase();
+        const lines = document.querySelectorAll(".table-line");
 
-        linhas.forEach((linha) => {
-            const texto = linha.textContent.toLowerCase();
-            if (texto.includes(termo)) {
-                linha.style.display = "";
+        lines.forEach((line) => {
+            const text = line.textContent.toLowerCase();
+            if (text.includes(term)) {
+                line.style.display = "";
             } else {
-                linha.style.display = "none";
+                line.style.display = "none";
             }
         });
     });

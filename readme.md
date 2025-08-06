@@ -1,6 +1,17 @@
-1. Estruturar o Banco de Dados.
-2. Criar sistema de registro/atualização pro Banco de Dados pelo arquivo CSV.
+
+1. Criar pagina para o usuario solicitar/reivindicar uma NE
+
+2. Menu do admin para gerenciar as NEs, incluido autorizar a solicitação de reivindicação do usuario
+ou seja, o usuario só pode ser responsavel pela NE se o admin autorizar.
+
+3. Verificar necessidade de status na NE, para ativo, ou inativo.
+
+4. O list mostrar apenas NEs do usuario
+
+5. Melhor a pagína de importar csv, ou mostrar essa opção apenas para o admin.
+
+6. Criar sistema de fornecedores
 
 
-Para definir o responsavel da NE, criar um sistema de renvindicar a NE, isso anula a necessidade de uma tabela Responsavel, por que dai a NE vai pertencer ao Usuario que a renvindicou e o usuario vai ser/ter uma seção registrada na sua tabela do BD.
+
 

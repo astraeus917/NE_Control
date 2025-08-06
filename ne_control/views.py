@@ -2,6 +2,7 @@ import csv
 import io
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from .models import NoteNE, ActionTaken
 from .forms import ActionTakenForm
 from decimal import Decimal
@@ -11,6 +12,22 @@ def parse_brl(value):
     """Converte valor em formato brasileiro para Decimal."""
     return Decimal(value.replace(".", "").replace(",", "."))
 
+@login_required
+def general_list(request):
+    notes_ne = NoteNE.objects.filter(responsavel__isnull=True)
+
+    if request.method == 'POST':
+        user = request.POST.get('user')
+        cod_ne = request.POST.get('cod_ne')
+
+        print(user)
+        print(cod_ne)
+
+    else:
+        # messages.error(request, "Erro ao reivindicar.")
+        print('error ao reivindicar')
+
+    return render(request, 'ne_control/general_list.html', {'notes_ne': notes_ne})
 
 @login_required
 def list(request):
@@ -42,8 +59,11 @@ def show(request, pk):
                 description=description
             )
 
+            messages.success(request, "Nova medida registrada com sucesso!")
+            return redirect('show', pk=pk)
+
         else:
-            form.add_error(None, "Erro ao cadastrar medida.")
+            messages.error(request, "Erro ao cadastrar medida!")
 
     else:
         form = ActionTakenForm()
@@ -91,7 +111,7 @@ def import_csv(request):
                 }
             )
 
-        return redirect("list")  # Redireciona para a lista de NEs.
+        return redirect("list")  # redireciona para a lista de NEs.
 
     return render(request, "ne_control/import.html")
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .forms import LoginForm, RegisterForm
 
 # Seta o modelo do Usuario, modelo personalizado criado no models.
@@ -18,8 +19,9 @@ def login_user(request):
             if user is not None:
                 login(request, user)
                 return redirect('list')
+            
             else:
-                form.add_error(None, "Usuário ou senha inválidos!")
+                messages.error(request, "Usuário ou senha inválidos!")
 
     else:
         form = LoginForm()
@@ -36,10 +38,10 @@ def register_user(request):
             confirm_password = form.cleaned_data['confirm_password']
 
             if password != confirm_password:
-                form.add_error(None, "As senhas não coincidem")
+                messages.error(request, "As senhas não coincidem!")
             else:
                 if User.objects.filter(username=username).exists():
-                    form.add_error(None, "Este nome de usuário já existe!")
+                    messages.error(request, "Este nome de usuário já existe!")
                 else:
                     user = User.objects.create_user(username=username, password=password)
                     return redirect('login')

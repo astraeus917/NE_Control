@@ -11,10 +11,16 @@
         <form method="POST">
             {% csrf_token %}
 
-            {% if form.non_field_errors %}
-                {% for error in form.non_field_errors %}
-                    <div>
-                        <p class="text-red-700">{{ error }}</p>
+            {% if messages %}
+                {% for msg in messages %}
+                    <div id="pop_up"
+                            class="fixed top-5 right-5 px-4 py-2 rounded shadow-md
+                                    {% if msg.tags == 'success' %}bg-green-500 text-white
+                                    {% elif msg.tags == 'error' %}bg-red-500 text-white
+                                    {% elif msg.tags == 'warning' %}bg-yellow-500 text-black
+                                    {% elif msg.tags == 'info' %}bg-blue-500 text-white
+                                    {% else %}bg-gray-500 text-white{% endif %}">
+                        {{ msg }}
                     </div>
                 {% endfor %}
             {% endif %}

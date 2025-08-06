@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="pt_BR">
 <head>
@@ -14,6 +13,33 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body class="bg-gray-100">
+
+    <!-- Conteúdo do Sistema -->
     {% block content %}{% endblock %}
+
+<!-- Scripts JS -->
+<script>
+    // Esconde o pop up de alerta do sistema.
+    setTimeout(() => {
+        const alert = document.getElementById('pop_up');
+        alert.classList.add('opacity-0');
+        setTimeout(() => alert.remove(), 500);
+    }, 3000);
+
+    // Função do pesquisar.
+    document.getElementById("search").addEventListener("input", function () {
+        const term = this.value.toLowerCase();
+        const lines = document.querySelectorAll(".table-line");
+
+        lines.forEach((line) => {
+            const text = line.textContent.toLowerCase();
+            if (text.includes(term)) {
+                line.style.display = "";
+            } else {
+                line.style.display = "none";
+            }
+        });
+    });
+</script>
 </body>
 </html>
