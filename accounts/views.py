@@ -43,7 +43,7 @@ def register_user(request):
                 if User.objects.filter(username=username).exists():
                     messages.error(request, "Este nome de usuário já existe!")
                 else:
-                    user = User.objects.create_user(username=username, password=password)
+                    user = User.objects.create_user(username=username, password=password, role='visitor')
                     return redirect('login')
     
     else:

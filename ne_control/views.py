@@ -3,6 +3,7 @@ import io
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from .models import NoteNE, ActionTaken
 from .forms import ActionTakenForm
 from decimal import Decimal
@@ -31,7 +32,7 @@ def general_list(request):
 
 @login_required
 def list(request):
-    notes_ne = NoteNE.objects.prefetch_related('actions_taken')
+    notes_ne = NoteNE.objects.filter(responsavel=request.user).prefetch_related('actions_taken')
     return render(request, 'ne_control/list.html', {'notes_ne': notes_ne})
 
 
@@ -72,7 +73,10 @@ def show(request, pk):
 
 
 @login_required
-def import_csv(request):
+def manage(request):
+    if not request.user.role == 'admin':
+        raise PermissionDenied
+
     if request.method == 'POST' and request.FILES.get("csv_file"):
         csv_file = request.FILES["csv_file"]
 
@@ -113,7 +117,7 @@ def import_csv(request):
 
         return redirect("list")  # redireciona para a lista de NEs.
 
-    return render(request, "ne_control/import.html")
+    return render(request, "ne_control/manage.html")
 
 
 
