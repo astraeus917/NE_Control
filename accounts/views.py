@@ -18,7 +18,7 @@ def login_user(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('list')
+                return redirect('control')
             
             else:
                 messages.error(request, "Usuário ou senha inválidos!")

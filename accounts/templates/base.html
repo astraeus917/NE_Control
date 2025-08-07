@@ -33,7 +33,7 @@
             <li><a href="{% url 'control' %}">Minhas NEs</a></li>
             <li><a href="{% url 'list' %}">Todas as NEs</a></li>
             {% if user.role == 'admin' %}
-                <li><a href="{% url 'manage' %}">Gestão de NEs</a></li>
+                <li><a href="{% url 'manage' %}">Gestão</a></li>
             {% endif %}
             <li><a href="{% url 'logout' %}">Sair</a></li>
         </ul>
@@ -44,29 +44,50 @@
 
 <!-- Scripts JS -->
 <script>
-    // Esconde todos os pop-ups após 3 segundos
-    setTimeout(() => {
-        document.querySelectorAll(".popup-message").forEach(el => {
-            el.classList.add("opacity-0");
-            setTimeout(() => el.remove(), 500);
+    // Função para esconder todos os pop-ups após 3 segundos.
+    function hidePopupsAfterDelay() {
+        setTimeout(() => {
+            document.querySelectorAll(".popup-message").forEach(el => {
+                el.classList.add("opacity-0");
+                setTimeout(() => el.remove(), 500);
+            });
+        }, 3000);
+    }
+
+    // Função para ativar a pesquisa dinâmica na tabela.
+    function enableSearch(inputId, targetSelector) {
+        const searchInput = document.getElementById(inputId);
+
+        if (!searchInput) return;
+
+        searchInput.addEventListener("input", function () {
+            const term = this.value.toLowerCase();
+            const lines = document.querySelectorAll(targetSelector);
+
+            lines.forEach(line => {
+                const text = line.textContent.toLowerCase();
+                line.style.display = text.includes(term) ? "" : "none";
+            });
         });
-    }, 3000);
+    }
 
+    // Função para simular um acordeon.
+    function toggleAccordion(id) {
+        const content = document.getElementById(id);
+        const icon = document.getElementById('icon-' + id);
 
-    // Função do pesquisar.
-    document.getElementById("search").addEventListener("input", function () {
-        const term = this.value.toLowerCase();
-        const lines = document.querySelectorAll(".table-line");
+        if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            icon.classList.add('rotate-180');
+        } else {
+            content.classList.add('hidden');
+            icon.classList.remove('rotate-180');
+        }
+    }
 
-        lines.forEach((line) => {
-            const text = line.textContent.toLowerCase();
-            if (text.includes(term)) {
-                line.style.display = "";
-            } else {
-                line.style.display = "none";
-            }
-        });
-    });
+    // Executando as funções.
+    hidePopupsAfterDelay();
+    enableSearch("search", ".table-line");
 </script>
 </body>
 </html>
