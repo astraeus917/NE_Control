@@ -52,6 +52,13 @@ def show(request, pk):
     # tbm pode ser usado related_name, para um codigo mais reutilizavel e organizado, porem sem tanto controle.
     action_taken = ActionTaken.objects.filter(cod_ne=note_ne)
 
+    # Contexto para usar no template.
+    context = {
+        'note_ne': note_ne,
+        'action_taken': action_taken,
+        'form': form
+    }
+
     if request.method == 'POST':
         form = ActionTakenForm(request.POST)
         if form.is_valid():
@@ -78,55 +85,94 @@ def show(request, pk):
     else:
         form = ActionTakenForm()
 
-    return render(request, 'ne_control/show.html', {'note_ne': note_ne, 'action_taken': action_taken, 'form': form})
+    return render(request, 'ne_control/show.html', context)
 
 
 @login_required
 def manage(request):
     if not request.user.role == 'admin':
         raise PermissionDenied
+    
+    if request.method == 'POST':
+        # Trata o formulario de importação do CSV.
+        if request.POST.get('form_type') == 'form1' and request.FILES.get("csv_file"):
+            csv_file = request.FILES["csv_file"]
 
-    if request.method == 'POST' and request.FILES.get("csv_file"):
-        csv_file = request.FILES["csv_file"]
+            # Verifica se um arquivo .csv foi anexado para importação.
+            if not csv_file.name.endswith(".csv"):
+                return render(request, "ne_control/import.html", {"error": "Arquivo inválido."})
 
-        # Verifica se um arquivo .csv foi anexado para importação.
-        if not csv_file.name.endswith(".csv"):
-            return render(request, "ne_control/import.html", {"error": "Arquivo inválido."})
+            # Faz a leitura do .csv para importar pro Banco de Dados.
+            decoded_file = csv_file.read().decode("utf-8-sig")
+            io_string = io.StringIO(decoded_file)
+            reader = csv.DictReader(io_string)
 
-        # Faz a leitura do .csv para importar pro Banco de Dados.
-        decoded_file = csv_file.read().decode("utf-8-sig")
-        io_string = io.StringIO(decoded_file)
-        reader = csv.DictReader(io_string)
+            for row in reader:
+                # Codigo para buscar o responsavel no csv.
+                # responsavel_nome = row["responsavel"].strip()
 
-        for row in reader:
-            # Codigo para buscar o responsavel no csv.
-            # responsavel_nome = row["responsavel"].strip()
+                # responsavel_name = 'Gestão'
+                # Ele busca o responsavel no Banco de Dados e cria se não existir.
+                # responsavel_obj, _ = Responsible.objects.get_or_create(name=responsavel_name)
 
-            # responsavel_name = 'Gestão'
-            # Ele busca o responsavel no Banco de Dados e cria se não existir.
-            # responsavel_obj, _ = Responsible.objects.get_or_create(name=responsavel_name)
+                # Atualiza ou cria a NE.
+                # Verificar necessidade de apagar NE se ela estiver fora do csv.
+                NoteNE.objects.update_or_create(
+                    cod_ne=row["NE"],
+                    defaults={
+                        "ug": int(row["UG"]),
+                        "pi": row["PI"],
+                        "nd": int(row["ND"]),
+                        "dias": int(row["DIAS"]),
+                        "a_liquidar": parse_brl(row["A LIQUIDAR"]),
+                        "liquidado_pagar": parse_brl(row["LIQUIDADO A PAGAR"]),
+                        "total_pagar": parse_brl(row["TOTAL A PAGAR"]),
+                        "pago": parse_brl(row["PAGO"]),
+                        "responsavel": None,
+                        "data_contato": row["DATA"], # esta como CharField e não como DataField.
+                    }
+                )
 
-            # Atualiza ou cria a NE.
-            # Verificar necessidade de apagar NE se ela estiver fora do csv.
-            NoteNE.objects.update_or_create(
-                cod_ne=row["NE"],
-                defaults={
-                    "ug": int(row["UG"]),
-                    "pi": row["PI"],
-                    "nd": int(row["ND"]),
-                    "dias": int(row["DIAS"]),
-                    "a_liquidar": parse_brl(row["A LIQUIDAR"]),
-                    "liquidado_pagar": parse_brl(row["LIQUIDADO A PAGAR"]),
-                    "total_pagar": parse_brl(row["TOTAL A PAGAR"]),
-                    "pago": parse_brl(row["PAGO"]),
-                    "responsavel": None,
-                    "data_contato": row["DATA"], # esta como CharField e não como DataField.
-                }
-            )
+            # return redirect("list")  # redireciona para a lista de NEs.
 
-        return redirect("list")  # redireciona para a lista de NEs.
+        # Trata o formulario de confirmação de reivindicação.
+        elif request.POST.get('form_type') == 'form2':
+            cod_ne = request.POST.get('cod_ne')
+            claim_id = request.POST.get('claim_id')
 
-    return render(request, "ne_control/manage.html")
+            claim = get_object_or_404(Claim, id=claim_id)
+
+            try:
+                note_ne = NoteNE.objects.get(pk=cod_ne)
+
+                note_ne.responsavel = claim.user
+                note_ne.save()
+
+                claim.status = False
+                claim.save()
+
+                messages.success(request, "Autorizado!")
+
+            except Exception as error:
+                messages.error(request, error)
+
+        # Negar a solicitação.
+        elif request.POST.get('form_type') == 'form3':
+            claim_id = request.POST.get('claim_id')
+            claim = get_object_or_404(Claim, id=claim_id)
+
+            try:
+                claim.status = False
+                claim.save()
+                messages.warning(request, "Solicitação negada!")
+
+            except Exception as error:
+                messages.error(request, error)
+
+    # Passar para o template os claims.
+    claim_list = Claim.objects.filter(status = True)
+
+    return render(request, "ne_control/manage.html", {'claim_list': claim_list})
 
 
 

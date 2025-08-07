@@ -10,10 +10,12 @@
     <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
+            {{ form1 }}
 
             <input type="file" name="csv_file" accept=".csv" required class="mb-4">
 
-            <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                name="form_type" value="form1">
                 Impotar CSV
             </button>
         </form>
@@ -25,15 +27,49 @@
             <!-- Campos da lista -->
             <thead class="bg-gray-200 text-gray-700">
                 <tr>
-                    <th class="px-4 py-2 border">UG</th>
+                    <th class="px-4 py-2 border">Código da NE</th>
+                    <th class="px-4 py-2 border">Usuário que solicitou</th>
+                    <th class="px-4 py-2 border">Ação</th>
                 </tr>
             </thead>
 
             <!-- Informações da lista -->
             <tbody>
-                <tr class="table-line hover:bg-gray-100">
-                    <td class="px-4 py-2 border">Teste</td>
-                </tr>
+                {% for claim in claim_list %}
+                    <tr class="table-line hover:bg-gray-100">
+                        <td class="px-4 py-2 border">{{ claim.cod_ne }}</td>
+                        <td class="px-4 py-2 border">{{ claim.user }}</td>
+
+                        <!-- Autorizar ou negar a reivindicação -->
+                        <td>
+                            <form method="POST">
+                                {% csrf_token %}
+                                {{ form2 }}
+                                
+                                <!-- Codigo do NE a ser reivindicado -->
+                                <input class="hidden" type="text" name="cod_ne" value="{{ claim.cod_ne }}">
+                                <input class="hidden" type="text" name="claim_id" value="{{ claim.id }}">
+
+                                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                                    type="submit" name="form_type" value="form2">
+                                    Autorizar
+                                </button>
+                            </form>
+                            <form method="POST">
+                                {% csrf_token %}
+                                {{ form3 }}
+
+                                <!-- Codigo do NE a ser reivindicado -->
+                                <input class="hidden" type="text" name="claim_id" value="{{ claim.id }}">
+                            
+                                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                                    type="submit" name="form_type" value="form3">
+                                    Negar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
