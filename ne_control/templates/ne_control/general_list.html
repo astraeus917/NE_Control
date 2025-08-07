@@ -37,9 +37,24 @@
 
             <!-- Informações da lista. -->
             <tbody>
+                {% if messages %}
+                    {% for msg in messages %}
+                        <div id="pop_up"
+                                class="fixed top-5 right-5 px-4 py-2 rounded shadow-md
+                                    {% if msg.tags == 'success' %}bg-green-500 text-white
+                                    {% elif msg.tags == 'error' %}bg-red-500 text-white
+                                    {% elif msg.tags == 'warning' %}bg-yellow-500 text-black
+                                    {% elif msg.tags == 'info' %}bg-blue-500 text-white
+                                    {% else %}bg-gray-500 text-white{% endif %}">
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
                 {% for note_ne in notes_ne %}
                     <form method="POST" action="{% url 'general-list' %}">
                         {% csrf_token %}
+
                         <tr class="table-line hover:bg-gray-100">
                             <td class="px-4 py-2 border">{{ note_ne.ug }}</td>
                             <td class="px-4 py-2 border">{{ note_ne.pi }}</td>
@@ -54,9 +69,6 @@
                             <td class="px-4 py-2 border">{{ note_ne.data_contato }}</td>
 
                             <td class="px-2 py-2 border">
-
-                                <!-- Nome do usuario que esta reivindicando -->
-                                <input class="hidden" type="text" name="user" value="{{ note_ne.cod_ne }}">
 
                                 <!-- Codigo do NE a ser reivindicado -->
                                 <input class="hidden" type="text" name="cod_ne" value="{{ note_ne.cod_ne }}">
@@ -75,3 +87,4 @@
 </div>
 
 {% endblock %}
+

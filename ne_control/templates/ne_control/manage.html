@@ -5,6 +5,8 @@
 {% block content %}
 
 <div class="p-6">
+
+    <!-- Importação das NEs pelo CSV -->
     <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
@@ -16,6 +18,26 @@
             </button>
         </form>
     </div>
+
+    <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
+        <p>Solicitações de reivindicação de NEs</p>
+        <table class="min-w-full text-sm text-left border border-gray-300">
+            <!-- Campos da lista -->
+            <thead class="bg-gray-200 text-gray-700">
+                <tr>
+                    <th class="px-4 py-2 border">UG</th>
+                </tr>
+            </thead>
+
+            <!-- Informações da lista -->
+            <tbody>
+                <tr class="table-line hover:bg-gray-100">
+                    <td class="px-4 py-2 border">Teste</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 {% endblock %}
+

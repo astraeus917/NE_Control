@@ -41,6 +41,13 @@ class ActionTaken(models.Model): # Medida tomada.
         return self.description[:50] + '...'
 
 
+# Tabela do Banco de Dados onde vão ser armazenadas as solicitações de reivindicação.
+class Claim(models.Model):
+    status = models.BooleanField(default=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    cod_ne = models.ForeignKey(NoteNE, on_delete=models.CASCADE)
+
+
 # class supplier(models.Model): # Fornecedor.
 #     cod_ne = models.CharField(max_length=200)
 #     # cod_fornecedor

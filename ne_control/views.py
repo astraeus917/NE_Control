@@ -4,10 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
-from .models import NoteNE, ActionTaken
+from django.contrib.auth import get_user_model
+from .models import NoteNE, ActionTaken, Claim
 from .forms import ActionTakenForm
 from decimal import Decimal
 
+User = get_user_model()
 
 def parse_brl(value):
     """Converte valor em formato brasileiro para Decimal."""
@@ -18,15 +20,22 @@ def general_list(request):
     notes_ne = NoteNE.objects.filter(responsavel__isnull=True)
 
     if request.method == 'POST':
-        user = request.POST.get('user')
         cod_ne = request.POST.get('cod_ne')
 
-        print(user)
-        print(cod_ne)
+        try:
+            user = request.user
+            note_ne = NoteNE.objects.get(pk=cod_ne)
 
-    else:
-        # messages.error(request, "Erro ao reivindicar.")
-        print('error ao reivindicar')
+            # verifica se ja não existe uma solicitação pendente.
+            if Claim.objects.filter(user=user, cod_ne=note_ne, status=True).exists():
+                messages.warning(request, "Já existe uma solicitação para reivindicar essa NE.")
+
+            else:
+                Claim.objects.create(user=user, cod_ne=note_ne)
+                messages.success(request, "Reivindicação enviada com sucesso!")
+
+        except Exception as error:
+            messages.error(request, f"Erro ao reivindicar! {str(error)}")
 
     return render(request, 'ne_control/general_list.html', {'notes_ne': notes_ne})
 
