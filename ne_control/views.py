@@ -2,19 +2,46 @@ import csv
 import io
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import NoteNE, ActionTaken
+from django.contrib import messages
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth import get_user_model
+from .models import NoteNE, ActionTaken, Claim
 from .forms import ActionTakenForm
 from decimal import Decimal
 
+User = get_user_model()
 
 def parse_brl(value):
     """Converte valor em formato brasileiro para Decimal."""
     return Decimal(value.replace(".", "").replace(",", "."))
 
+@login_required
+def general_list(request):
+    notes_ne = NoteNE.objects.filter(responsavel__isnull=True)
+
+    if request.method == 'POST':
+        cod_ne = request.POST.get('cod_ne')
+
+        try:
+            user = request.user
+            note_ne = NoteNE.objects.get(pk=cod_ne)
+
+            # verifica se ja não existe uma solicitação pendente.
+            if Claim.objects.filter(user=user, cod_ne=note_ne, status=True).exists():
+                messages.warning(request, "Já existe uma solicitação para reivindicar essa NE.")
+
+            else:
+                Claim.objects.create(user=user, cod_ne=note_ne)
+                messages.success(request, "Reivindicação enviada com sucesso!")
+
+        except Exception as error:
+            messages.error(request, f"Erro ao reivindicar! {str(error)}")
+
+    return render(request, 'ne_control/general_list.html', {'notes_ne': notes_ne})
 
 @login_required
 def list(request):
-    notes_ne = NoteNE.objects.prefetch_related('actions_taken')
+    notes_ne = NoteNE.objects.filter(responsavel=request.user).prefetch_related('actions_taken')
     return render(request, 'ne_control/list.html', {'notes_ne': notes_ne})
 
 
@@ -42,8 +69,11 @@ def show(request, pk):
                 description=description
             )
 
+            messages.success(request, "Nova medida registrada com sucesso!")
+            return redirect('show', pk=pk)
+
         else:
-            form.add_error(None, "Erro ao cadastrar medida.")
+            messages.error(request, "Erro ao cadastrar medida!")
 
     else:
         form = ActionTakenForm()
@@ -52,7 +82,10 @@ def show(request, pk):
 
 
 @login_required
-def import_csv(request):
+def manage(request):
+    if not request.user.role == 'admin':
+        raise PermissionDenied
+
     if request.method == 'POST' and request.FILES.get("csv_file"):
         csv_file = request.FILES["csv_file"]
 
@@ -91,9 +124,9 @@ def import_csv(request):
                 }
             )
 
-        return redirect("list")  # Redireciona para a lista de NEs.
+        return redirect("list")  # redireciona para a lista de NEs.
 
-    return render(request, "ne_control/import.html")
+    return render(request, "ne_control/manage.html")
 
 
 

@@ -51,16 +51,16 @@
                     </thead>
                     <tbody>
                         {% for action in action_taken %}
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-2 border">{{ action.date|br_date }}</td>
-                            <td class="px-4 py-2 border">{{ action.responsible }}</td>
-                            <td class="px-4 py-2 border">{{ action.previ_date|br_date }}</td>
-                            <td class="px-4 py-2 border">{{ action.description }}</td>
-                        </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border">{{ action.date|br_date }}</td>
+                                <td class="px-4 py-2 border">{{ action.responsible }}</td>
+                                <td class="px-4 py-2 border">{{ action.previ_date|br_date }}</td>
+                                <td class="px-4 py-2 border">{{ action.description }}</td>
+                            </tr>
                         {% empty %}
-                        <tr>
-                            <td class="px-6 py-4 text-gray-500 border text-center">Nenhuma medida registrada.</td>
-                        </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-gray-500 border text-center">Nenhuma medida registrada.</td>
+                            </tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -73,10 +73,16 @@
             <form method="POST" class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                 {% csrf_token %}
 
-                {% if form.non_field_errors %}
-                    {% for error in form.non_field_errors %}
-                        <div>
-                            <p class="text-red-700">{{ error }}</p>
+                {% if messages %}
+                    {% for msg in messages %}
+                        <div id="pop_up"
+                                class="fixed top-5 right-5 px-4 py-2 rounded shadow-md
+                                    {% if msg.tags == 'success' %}bg-green-500 text-white
+                                    {% elif msg.tags == 'error' %}bg-red-500 text-white
+                                    {% elif msg.tags == 'warning' %}bg-yellow-500 text-black
+                                    {% elif msg.tags == 'info' %}bg-blue-500 text-white
+                                    {% else %}bg-gray-500 text-white{% endif %}">
+                            {{ msg }}
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -108,3 +114,4 @@
 </div>
 
 {% endblock %}
+

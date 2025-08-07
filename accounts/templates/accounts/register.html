@@ -1,38 +1,52 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
 
-{% block title %}Registro{% endblock %}
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Style.css -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+    <div class="flex items-center justify-center min-h-screen overflow-hidden">
+        <div class="w-full max-w-sm p-6 bg-white rounded-xl shadow-md">
+            <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Registrar Usuário</h2>
 
-{% block content %}
+            <form method="POST">
+                {% csrf_token %}
 
-<div class="flex items-center justify-center min-h-screen overflow-hidden">
-    <div class="w-full max-w-sm p-6 bg-white rounded-xl shadow-md">
-        <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Registrar Usuário</h2>
+                {% if messages %}
+                    {% for msg in messages %}
+                        <div id="pop_up"
+                                class="fixed top-5 right-5 px-4 py-2 rounded shadow-md
+                                        {% if msg.tags == 'success' %}bg-green-500 text-white
+                                        {% elif msg.tags == 'error' %}bg-red-500 text-white
+                                        {% elif msg.tags == 'warning' %}bg-yellow-500 text-black
+                                        {% elif msg.tags == 'info' %}bg-blue-500 text-white
+                                        {% else %}bg-gray-500 text-white{% endif %}">
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
 
-        <form method="POST">
-            {% csrf_token %}
+                <label for="{{ form.username.id_for_label }}" class="block text-gray-700">Usuário:</label>
+                {{ form.username }}
 
-            {% if form.non_field_errors %}
-                {% for error in form.non_field_errors %}
-                    <div>
-                        <p class="text-red-700">{{ error }}</p>
-                    </div>
-                {% endfor %}
-            {% endif %}
+                <label for="{{ form.password.id_for_label }}" class="block text-gray-700">Senha:</label>
+                {{ form.password }}
 
-            <label for="{{ form.username.id_for_label }}" class="block text-gray-700">Usuário:</label>
-            {{ form.username }}
+                <label for="{{ form.confirm_password.id_for_label }}" class="block text-gray-700">Confirme a Senha:</label>
+                {{ form.confirm_password }}
 
-            <label for="{{ form.password.id_for_label }}" class="block text-gray-700">Senha:</label>
-            {{ form.password }}
-
-            <label for="{{ form.confirm_password.id_for_label }}" class="block text-gray-700">Confirme a Senha:</label>
-            {{ form.confirm_password }}
-
-            <div>
-                <button type="submit">Registrar</button>
-            </div>
-        </form>
+                <div>
+                    <button type="submit">Registrar</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-{% endblock %}
+</body>
+</html>
