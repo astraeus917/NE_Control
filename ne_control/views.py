@@ -16,7 +16,7 @@ def parse_brl(value):
     return Decimal(value.replace(".", "").replace(",", "."))
 
 @login_required
-def general_list(request):
+def list(request):
     notes_ne = NoteNE.objects.filter(responsavel__isnull=True)
 
     if request.method == 'POST':
@@ -28,21 +28,21 @@ def general_list(request):
 
             # verifica se ja não existe uma solicitação pendente.
             if Claim.objects.filter(user=user, cod_ne=note_ne, status=True).exists():
-                messages.warning(request, "Já existe uma solicitação para reivindicar essa NE.")
+                messages.warning(request, "Aguardando autorização do Gestor!")
 
             else:
                 Claim.objects.create(user=user, cod_ne=note_ne)
-                messages.success(request, "Reivindicação enviada com sucesso!")
+                messages.success(request, f"{note_ne} Reivindicada com sucesso!")
 
         except Exception as error:
             messages.error(request, f"Erro ao reivindicar! {str(error)}")
 
-    return render(request, 'ne_control/general_list.html', {'notes_ne': notes_ne})
+    return render(request, 'ne_control/list.html', {'notes_ne': notes_ne})
 
 @login_required
-def list(request):
+def control(request):
     notes_ne = NoteNE.objects.filter(responsavel=request.user).prefetch_related('actions_taken')
-    return render(request, 'ne_control/list.html', {'notes_ne': notes_ne})
+    return render(request, 'ne_control/control.html', {'notes_ne': notes_ne})
 
 
 @login_required
@@ -51,13 +51,6 @@ def show(request, pk):
 
     # tbm pode ser usado related_name, para um codigo mais reutilizavel e organizado, porem sem tanto controle.
     action_taken = ActionTaken.objects.filter(cod_ne=note_ne)
-
-    # Contexto para usar no template.
-    context = {
-        'note_ne': note_ne,
-        'action_taken': action_taken,
-        'form': form
-    }
 
     if request.method == 'POST':
         form = ActionTakenForm(request.POST)
@@ -80,12 +73,12 @@ def show(request, pk):
             return redirect('show', pk=pk)
 
         else:
-            messages.error(request, "Erro ao cadastrar medida!")
+            messages.error(request, "Erro ao registrar medida!")
 
     else:
         form = ActionTakenForm()
 
-    return render(request, 'ne_control/show.html', context)
+    return render(request, 'ne_control/show.html', {'note_ne': note_ne, 'action_taken': action_taken, 'form': form})
 
 
 @login_required
@@ -151,7 +144,7 @@ def manage(request):
                 claim.status = False
                 claim.save()
 
-                messages.success(request, "Autorizado!")
+                messages.success(request, "Solicitação autorizada!")
 
             except Exception as error:
                 messages.error(request, error)

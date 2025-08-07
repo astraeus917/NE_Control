@@ -8,6 +8,9 @@
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Style.css -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body class="bg-gray-100">
 
@@ -27,18 +30,6 @@
         </div>
     {% endif %}
 
-    <!-- Menu de navegação do site -->
-    <nav>
-        <ul>
-            <li><a href="{% url 'control' %}">Minhas NEs</a></li>
-            <li><a href="{% url 'list' %}">Todas as NEs</a></li>
-            {% if user.role == 'admin' %}
-                <li><a href="{% url 'manage' %}">Gestão de NEs</a></li>
-            {% endif %}
-            <li><a href="{% url 'logout' %}">Sair</a></li>
-        </ul>
-    </nav>
-
     <!-- Conteúdo do Sistema -->
     {% block content %}{% endblock %}
 
@@ -51,22 +42,6 @@
             setTimeout(() => el.remove(), 500);
         });
     }, 3000);
-
-
-    // Função do pesquisar.
-    document.getElementById("search").addEventListener("input", function () {
-        const term = this.value.toLowerCase();
-        const lines = document.querySelectorAll(".table-line");
-
-        lines.forEach((line) => {
-            const text = line.textContent.toLowerCase();
-            if (text.includes(term)) {
-                line.style.display = "";
-            } else {
-                line.style.display = "none";
-            }
-        });
-    });
 </script>
 </body>
 </html>
