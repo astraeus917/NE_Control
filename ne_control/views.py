@@ -1,6 +1,6 @@
 import csv
 import io
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
@@ -9,15 +9,27 @@ from .models import NoteNE, ActionTaken, Claim
 from .forms import ActionTakenForm
 from decimal import Decimal
 
+# Seta o User do get_user_model, por conta de ser um modelo personalizado.
 User = get_user_model()
+
+# Função para verificar se usuário é ativo.
+def is_user_active(user):
+    return user.is_active
+
 
 def parse_brl(value):
     """Converte valor em formato brasileiro para Decimal."""
     return Decimal(value.replace(".", "").replace(",", "."))
 
+
+@user_passes_test(is_user_active)
 @login_required
 def list(request):
+    # Busca informações no banco de dados para o contexto.
     notes_ne = NoteNE.objects.filter(responsavel__isnull=True)
+    context = {
+        'notes_ne': notes_ne
+    }
 
     if request.method == 'POST':
         cod_ne = request.POST.get('cod_ne')
@@ -37,20 +49,33 @@ def list(request):
         except Exception as error:
             messages.error(request, f"Erro ao reivindicar! {str(error)}")
 
-    return render(request, 'ne_control/list.html', {'notes_ne': notes_ne})
+    return render(request, 'ne_control/list.html', context)
 
+
+@user_passes_test(is_user_active)
 @login_required
 def control(request):
     notes_ne = NoteNE.objects.filter(responsavel=request.user).prefetch_related('actions_taken')
-    return render(request, 'ne_control/control.html', {'notes_ne': notes_ne})
+    context = {
+        'notes_ne': notes_ne
+    }
+    
+    return render(request, 'ne_control/control.html', context)
 
 
+@user_passes_test(is_user_active)
 @login_required
 def show(request, pk):
+    # Busca informações no Banco de Dados para passar no contexto.
+    form = ActionTakenForm()
     note_ne = get_object_or_404(NoteNE, pk=pk)
-
-    # tbm pode ser usado related_name, para um codigo mais reutilizavel e organizado, porem sem tanto controle.
     action_taken = ActionTaken.objects.filter(cod_ne=note_ne)
+
+    context = {
+        'form': form,
+        'note_ne': note_ne,
+        'action_taken': action_taken
+    }
 
     if request.method == 'POST':
         form = ActionTakenForm(request.POST)
@@ -75,14 +100,21 @@ def show(request, pk):
         else:
             messages.error(request, "Erro ao registrar medida!")
 
-    else:
-        form = ActionTakenForm()
-
-    return render(request, 'ne_control/show.html', {'note_ne': note_ne, 'action_taken': action_taken, 'form': form})
+    return render(request, 'ne_control/show.html', context)
 
 
+@user_passes_test(is_user_active)
 @login_required
 def manage(request):
+    # Informações necessarias para passar no contexto.
+    claim_list = Claim.objects.filter(status=True)
+    user_list = User.objects.filter(is_active=False)
+    
+    context = {
+        'claim_list': claim_list,
+        'user_list': user_list
+    }
+
     if not request.user.role == 'admin':
         raise PermissionDenied
     
@@ -125,6 +157,7 @@ def manage(request):
                         "data_contato": row["DATA"], # esta como CharField e não como DataField.
                     }
                 )
+            messages.success(request, "Importação concluída com sucesso!")
 
             # return redirect("list")  # redireciona para a lista de NEs.
 
@@ -162,10 +195,33 @@ def manage(request):
             except Exception as error:
                 messages.error(request, error)
 
-    # Passar para o template os claims.
-    claim_list = Claim.objects.filter(status = True)
+        # Autorizar usuario.
+        elif request.POST.get('form_type') == 'form4':
+            user_id = request.POST.get('user_id')
 
-    return render(request, "ne_control/manage.html", {'claim_list': claim_list})
+            try:
+                user = User.objects.get(pk=user_id)
+                user.is_active = True
+                user.save()
+                messages.success(request, f"Usuário {user} autorizado!")
+
+            except Exception as error:
+                messages.error(request, error)
+
+
+        # Negar usuario.
+        elif request.POST.get('form_type') == 'form5':
+            user_id = request.POST.get('user_id')
+
+            try:
+                user = User.objects.get(pk=user_id)
+                user.delete()
+                messages.success(request, f"Usuário {user} negado e deletado!")
+
+            except Exception as error:
+                messages.error(request, error)
+
+    return render(request, "ne_control/manage.html", context)
 
 
 

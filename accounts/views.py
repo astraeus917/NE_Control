@@ -7,28 +7,37 @@ from .forms import LoginForm, RegisterForm
 # Seta o modelo do Usuario, modelo personalizado criado no models.
 User = get_user_model()
 
+
 def login_user(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
+
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            user = authenticate(request, username=username, password=password)
+            try:
+                user_obj = User.objects.get(username=username)
+            except User.DoesNotExist:
+                user_obj = None
 
-            if user is not None:
-                login(request, user)
-                return redirect('control')
-            
+            if user_obj and not user_obj.is_active:
+                messages.warning(request, "Aguardando autorização do Administrador!")
+
             else:
-                messages.error(request, "Usuário ou senha inválidos!")
+                user = authenticate(request, username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    return redirect('control')
+                else:
+                    messages.error(request, "Usuário ou senha inválidos!")
 
     else:
         form = LoginForm()
 
     return render(request, 'accounts/login.html', {'form': form})
 
-@login_required
+
 def register_user(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -43,7 +52,7 @@ def register_user(request):
                 if User.objects.filter(username=username).exists():
                     messages.error(request, "Este nome de usuário já existe!")
                 else:
-                    user = User.objects.create_user(username=username, password=password, role='visitor')
+                    user = User.objects.create_user(username=username, password=password, role='responsible')
                     return redirect('login')
     
     else:
@@ -55,4 +64,6 @@ def register_user(request):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+
 

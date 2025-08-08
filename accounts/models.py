@@ -19,13 +19,12 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = (
         ('admin', 'Administrador'),
-        ('responsible', 'Responsável por NE'),
-        ('visitor', 'Visitante'),
+        ('responsible', 'Responsável por NE')
     )
 
     username = models.CharField(max_length=150, unique=True)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='visitor')
-    is_active = models.BooleanField(default=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
     objects = UserManager()

@@ -90,7 +90,63 @@
         </div>
     </div>
 
-    <!-- ss -->
+    <!-- Autorizar registro de usuário -->
+         <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
+        <button onclick="toggleAccordion('section3')" class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center">
+            Solicitações de acesso ao sistema.
+            <svg id="icon-section1" class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+        <div id="section3" class="hidden">
+            <table class="min-w-full text-sm text-left border border-gray-300">
+                <!-- Campos da lista -->
+                <thead class="bg-gray-200 text-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 border">Nome do Usuário</th>
+                        <th class="px-4 py-2 border">Cargo</th>
+                        <th class="px-4 py-2 border">Ação</th>
+                    </tr>
+                </thead>
+
+                <!-- Informações da lista -->
+                <tbody>
+                    {% for user in user_list %}
+                        <tr class="table-line hover:bg-gray-100">
+                            <td class="px-4 py-2 border">{{ user }}</td>
+                            <td class="px-4 py-2 border">{{ user.role }}</td>
+
+                            <!-- Autorizar ou negar a acesso -->
+                            <td>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    {{ form4 }}
+
+                                    <input class="hidden" type="text" name="user_id" value="{{ user.id }}">
+
+                                    <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                                        type="submit" name="form_type" value="form4">
+                                        Autorizar
+                                    </button>
+                                </form>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    {{ form5 }}
+
+                                    <input class="hidden" type="text" name="user_id" value="{{ user.id }}">
+                                
+                                    <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                                        type="submit" name="form_type" value="form5">
+                                        Negar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
