@@ -1,55 +1,95 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt_BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %}</title>
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Style.css -->
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-</head>
-<body class="bg-gray-100">
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+  </head>
+  <body class="bg-gray-100">
     <!-- Menu de navegação do site -->
-    <nav>
-        <ul>
-            <li><a href="{% url 'list' %}">Minhas NEs</a></li>
-            <li><a href="{% url 'general-list' %}">Todas as NEs</a></li>
+    <nav class="bg-gray-800 flex p-6 items-center">
+      <div class="flex shrink items-center">
+        <img
+          src="{% static 'img\logo.png' %}"
+          alt="Your Company"
+          class="h-12 w-auto"
+        />
+      </div>
+      <div
+        class="flex items-center justify-center sm:items-stretch sm:justify-start"
+      >
+        <div class="hidden sm:ml-6 sm:block">
+          <div class="flex space-x-4">
+            <a
+              class="{% if active_page == 'list' %} bg-gray-900 {% endif %} rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+              href="{% url 'list' %}"
+              >Minhas NEs</a
+            >
+            <a
+              class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+              href="{% url 'general-list' %}"
+              >Todas as NEs</a
+            >
             {% if user.role == 'admin' %}
-                <li><a href="{% url 'manage' %}">Controle de NEs</a></li>
+            <a
+              class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+              href="{% url 'manage' %}"
+              >Controle de NEs</a
+            >
             {% endif %}
-        </ul>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex grow justify-end"
+      >
+        <div class="flex hidden justify-items-end justify-self-end sm:ml-6 sm:block">
+            
+          <div class="flex space-x-4">
+            <a
+              class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+              href=""
+              >{{ user }}</a
+            >
+            </div>
+
+        </div>
+      </div>
     </nav>
 
     <!-- Conteúdo do Sistema -->
     {% block content %}{% endblock %}
 
-<!-- Scripts JS -->
-<script>
-    // Esconde o pop up de alerta do sistema.
-    setTimeout(() => {
-        const alert = document.getElementById('pop_up');
-        alert.classList.add('opacity-0');
+    <!-- Scripts JS -->
+    <script>
+      // Esconde o pop up de alerta do sistema.
+      setTimeout(() => {
+        const alert = document.getElementById("pop_up");
+        alert.classList.add("opacity-0");
         setTimeout(() => alert.remove(), 500);
-    }, 3000);
+      }, 3000);
 
-    // Função do pesquisar.
-    document.getElementById("search").addEventListener("input", function () {
+      // Função do pesquisar.
+      document.getElementById("search").addEventListener("input", function () {
         const term = this.value.toLowerCase();
         const lines = document.querySelectorAll(".table-line");
 
         lines.forEach((line) => {
-            const text = line.textContent.toLowerCase();
-            if (text.includes(term)) {
-                line.style.display = "";
-            } else {
-                line.style.display = "none";
-            }
+          const text = line.textContent.toLowerCase();
+          if (text.includes(term)) {
+            line.style.display = "";
+          } else {
+            line.style.display = "none";
+          }
         });
-    });
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>

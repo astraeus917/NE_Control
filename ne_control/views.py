@@ -42,7 +42,7 @@ def general_list(request):
 @login_required
 def list(request):
     notes_ne = NoteNE.objects.filter(responsavel=request.user).prefetch_related('actions_taken')
-    return render(request, 'ne_control/list.html', {'notes_ne': notes_ne})
+    return render(request, 'ne_control/list.html', {'notes_ne': notes_ne, 'active_page': 'list'})
 
 
 @login_required
