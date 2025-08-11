@@ -60,7 +60,8 @@ def list(request):
 def control(request):
     notes_ne = NoteNE.objects.filter(responsavel=request.user).prefetch_related('actions_taken')
     context = {
-        'notes_ne': notes_ne
+        'notes_ne': notes_ne,
+        'active_page': 'control'
     }
     
     return render(request, 'ne_control/control.html', context)

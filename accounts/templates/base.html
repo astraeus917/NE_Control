@@ -1,15 +1,18 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt_BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %}</title>
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
+
+    <!-- Style.css -->
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+  </head>
+  <body class="bg-gray-100">
 
     <!-- Pop-up de alertas do site -->
     {% if messages %}
@@ -28,16 +31,53 @@
     {% endif %}
 
     <!-- Menu de navegação do site -->
-    <nav>
-        <ul>
-            <li><a href="{% url 'control' %}">Minhas NEs</a></li>
-            <li><a href="{% url 'list' %}">Todas as NEs</a></li>
+    <nav class="bg-gray-800 flex p-6 items-center">
+      <div class="flex shrink items-center">
+        <img
+          src="{% static 'img\logo.png' %}"
+          alt="Your Company"
+          class="h-12 w-auto"
+        />
+      </div>
+      <div
+        class="flex items-center justify-center sm:items-stretch sm:justify-start"
+      >
+        <div class="hidden sm:ml-6 sm:block">
+          <div class="flex space-x-4">
+            <a
+              class="{% if active_page == 'control' %} bg-gray-900 {% endif %} rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+              href="{% url 'control' %}"
+              >Minhas NEs</a
+            >
+            <a
+              class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+              href="{% url 'list' %}"
+              >Todas as NEs</a
+            >
             {% if user.role == 'admin' %}
-                <li><a href="{% url 'manage' %}">Gestão</a></li>
-                <li><a href="{% url 'admin:index' %}">Administração</a></li>
+            <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" href="{% url 'manage' %}">Gestão</a>
+            <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" href="{% url 'admin:index' %}">Administração</a>
             {% endif %}
-            <li><a href="{% url 'logout' %}">Sair</a></li>
-        </ul>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex grow justify-end"
+      >
+        <div class="flex hidden justify-items-end justify-self-end sm:ml-6 sm:block">
+            
+          <div class="flex space-x-4">
+            <a
+              class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+              href=""
+              >{{ user }}</a
+            >
+
+            <a href="{% url 'logout' %}">Sair</a>
+            </div>
+
+        </div>
+      </div>
     </nav>
 
     <!-- Conteúdo do Sistema -->
