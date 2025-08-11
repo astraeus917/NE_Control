@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Style.css -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="bg-gray-100">
+
+    <!-- Pop-up de alertas do site -->
+    {% if messages %}
+        <div id="messages-container" class="fixed top-5 right-5 space-y-2 z-50">
+            {% for msg in messages %}
+                <div class="popup-message px-4 py-2 rounded shadow-md transition-opacity duration-500
+                    {% if msg.tags == 'success' %}bg-green-500 text-white
+                    {% elif msg.tags == 'error' %}bg-red-500 text-white
+                    {% elif msg.tags == 'warning' %}bg-yellow-500 text-black
+                    {% elif msg.tags == 'info' %}bg-blue-500 text-white
+                    {% else %}bg-gray-500 text-white{% endif %}">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Conteúdo do Sistema -->
+    {% block content %}{% endblock %}
+
+<!-- Scripts JS -->
+<script>
+    // Esconde todos os pop-ups após 3 segundos
+    setTimeout(() => {
+        document.querySelectorAll(".popup-message").forEach(el => {
+            el.classList.add("opacity-0");
+            setTimeout(() => el.remove(), 500);
+        });
+    }, 3000);
+</script>
+</body>
+</html>

@@ -5,37 +5,163 @@
 {% block content %}
 
 <div class="p-6">
-
     <!-- Importação das NEs pelo CSV -->
     <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+        <button onclick="toggleAccordion('section1')" class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center">
+            Importar arquivo .csv com NEs do SAG
+            <svg id="icon-section1" class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
 
-            <input type="file" name="csv_file" accept=".csv" required class="mb-4">
+        <div id="section1" class="hidden">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form1 }}
 
-            <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-                Impotar CSV
-            </button>
-        </form>
+                <input type="file" name="csv_file" accept=".csv" required class="mb-4">
+
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+                    name="form_type" value="form1">
+                    Impotar CSV
+                </button>
+            </form>
+        </div>
     </div>
 
+    <!-- Solicitações para reivindicação de NEs -->
     <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
-        <p>Solicitações de reivindicação de NEs</p>
-        <table class="min-w-full text-sm text-left border border-gray-300">
-            <!-- Campos da lista -->
-            <thead class="bg-gray-200 text-gray-700">
-                <tr>
-                    <th class="px-4 py-2 border">UG</th>
-                </tr>
-            </thead>
+        <button onclick="toggleAccordion('section2')" class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center">
+            <span>
+                Solicitações de reivindicação de NEs
+                <!-- Contador de solicitações -->
+                {% if claim_count > 0 %}
+                    <span>
+                        {{ claim_count }}
+                    </span>
+                {% endif %}
+            </span>
+            <svg id="icon-section1" class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+        <div id="section2" class="hidden">
+            <table class="min-w-full text-sm text-left border border-gray-300">
+                <!-- Campos da lista -->
+                <thead class="bg-gray-200 text-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 border">Código da NE</th>
+                        <th class="px-4 py-2 border">Usuário que solicitou</th>
+                        <th class="px-4 py-2 border">Ação</th>
+                    </tr>
+                </thead>
 
-            <!-- Informações da lista -->
-            <tbody>
-                <tr class="table-line hover:bg-gray-100">
-                    <td class="px-4 py-2 border">Teste</td>
-                </tr>
-            </tbody>
-        </table>
+                <!-- Informações da lista -->
+                <tbody>
+                    {% for claim in claim_list %}
+                        <tr class="table-line hover:bg-gray-100">
+                            <td class="px-4 py-2 border">{{ claim.cod_ne }}</td>
+                            <td class="px-4 py-2 border">{{ claim.user }}</td>
+
+                            <!-- Autorizar ou negar a reivindicação -->
+                            <td>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    {{ form2 }}
+                                    
+                                    <!-- Codigo do NE a ser reivindicado -->
+                                    <input class="hidden" type="text" name="cod_ne" value="{{ claim.cod_ne }}">
+                                    <input class="hidden" type="text" name="claim_id" value="{{ claim.id }}">
+
+                                    <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                                        type="submit" name="form_type" value="form2">
+                                        Autorizar
+                                    </button>
+                                </form>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    {{ form3 }}
+
+                                    <!-- Codigo do NE a ser reivindicado -->
+                                    <input class="hidden" type="text" name="claim_id" value="{{ claim.id }}">
+                                
+                                    <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                                        type="submit" name="form_type" value="form3">
+                                        Negar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Autorizar registro de usuário -->
+    <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
+        <button onclick="toggleAccordion('section3')" class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center">
+            <span>
+                <!-- Contador de solicitações -->
+                Solicitações de acesso ao sistema
+                {% if user_count > 0 %}
+                    <span>
+                        {{ user_count }}
+                    </span>
+                {% endif %}
+            </span>
+            <svg id="icon-section1" class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+        <div id="section3" class="hidden">
+            <table class="min-w-full text-sm text-left border border-gray-300">
+                <!-- Campos da lista -->
+                <thead class="bg-gray-200 text-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 border">Nome do Usuário</th>
+                        <th class="px-4 py-2 border">Cargo</th>
+                        <th class="px-4 py-2 border">Ação</th>
+                    </tr>
+                </thead>
+
+                <!-- Informações da lista -->
+                <tbody>
+                    {% for user in user_list %}
+                        <tr class="table-line hover:bg-gray-100">
+                            <td class="px-4 py-2 border">{{ user }}</td>
+                            <td class="px-4 py-2 border">{{ user.role }}</td>
+
+                            <!-- Autorizar ou negar a acesso -->
+                            <td>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    {{ form4 }}
+
+                                    <input class="hidden" type="text" name="user_id" value="{{ user.id }}">
+
+                                    <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                                        type="submit" name="form_type" value="form4">
+                                        Autorizar
+                                    </button>
+                                </form>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    {{ form5 }}
+
+                                    <input class="hidden" type="text" name="user_id" value="{{ user.id }}">
+                                
+                                    <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                                        type="submit" name="form_type" value="form5">
+                                        Negar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

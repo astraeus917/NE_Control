@@ -73,20 +73,6 @@
             <form method="POST" class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                 {% csrf_token %}
 
-                {% if messages %}
-                    {% for msg in messages %}
-                        <div id="pop_up"
-                                class="fixed top-5 right-5 px-4 py-2 rounded shadow-md
-                                    {% if msg.tags == 'success' %}bg-green-500 text-white
-                                    {% elif msg.tags == 'error' %}bg-red-500 text-white
-                                    {% elif msg.tags == 'warning' %}bg-yellow-500 text-black
-                                    {% elif msg.tags == 'info' %}bg-blue-500 text-white
-                                    {% else %}bg-gray-500 text-white{% endif %}">
-                            {{ msg }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
                 <div>
                     <label for="{{ form.date.id_for_label }}" class="block font-medium mb-1">Data</label>
                     {{ form.date }}

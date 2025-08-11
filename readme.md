@@ -1,17 +1,58 @@
+# Sistema de Controle de Notas de Empenho
 
-1. Criar pagina para o usuario solicitar/reivindicar uma NE
+Este projeto é um sistema web desenvolvido com **Python**, **Django** e **Tailwind CSS**, com o objetivo de facilitar o controle e a gestão de **notas de empenho** dentro de uma organização militar.
 
-2. Menu do admin para gerenciar as NEs, incluido autorizar a solicitação de reivindicação do usuario
-ou seja, o usuario só pode ser responsavel pela NE se o admin autorizar.
+## 📌 Sobre o Projeto
 
-3. Verificar necessidade de status na NE, para ativo, ou inativo.
+O sistema foi idealizado para atender às necessidades administrativas de setores responsáveis pela execução orçamentária, especialmente em ambientes militares. Seu foco principal é organizar, registrar e acompanhar as **notas de empenho** emitidas ao longo do exercício financeiro.
 
-4. O list mostrar apenas NEs do usuario
+## 🧾 O que são Notas de Empenho?
 
-5. Melhor a pagína de importar csv, ou mostrar essa opção apenas para o admin.
+A **nota de empenho** é um documento utilizado pela administração pública para reservar parte do orçamento com a finalidade de realizar determinada despesa. Trata-se de um compromisso formal da entidade pública com um fornecedor ou prestador de serviço, garantindo que existe dotação orçamentária suficiente para cobrir o valor empenhado.
 
-6. Criar sistema de fornecedores
+Existem três tipos principais de empenho:
+- **Empenho Ordinário:** para despesas que possam ser liquidadas de uma só vez.
+- **Empenho Global:** utilizado para despesas com execução contínua (ex: contratos).
+- **Empenho por Estimativa:** para despesas cujo valor exato não se conhece previamente.
 
+## ⚙️ Tecnologias Utilizadas
 
+- **[Python](https://www.python.org/)**
+- **[Django](https://www.djangoproject.com/)** – Framework web backend
+- **[Tailwind CSS](https://tailwindcss.com/)** – Framework CSS utilitário
+
+## 🚀 Funcionalidades
+
+- Cadastro e consulta de notas de empenho
+- Filtros por data, fornecedor, tipo de empenho, entre outros
+- Histórico e status das notas
+- Interface responsiva com Tailwind
+- Sistema adaptado à rotina de organizações militares
+
+## 🛠️ Instalação e Uso
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-usuario/nome-do-projeto.git
+
+2. Crie um ambiente virtual::
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # No Windows: venv\Scripts\activate
+
+3. Instale as dependências:
+    ```bash
+    pip install -r requirements.txt
+
+4. Aplique as migrações:
+    ```bash
+    python manage.py migrate
+
+5. Rode o servidor de desenvolvimento:
+    ```bash
+    python manage.py runserver
+
+## 📄 Licença
+Este projeto está sob a licença CC-BY-NC-SA-4.0 – veja o arquivo [CC-BY-NC-SA-4.0](CC-BY-NC-SA-4.0) para mais detalhes.
 
 
