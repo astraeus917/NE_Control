@@ -5,7 +5,6 @@
 {% block content %}
 
 <div class="p-6">
-
     <!-- Importação das NEs pelo CSV -->
     <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
         <button onclick="toggleAccordion('section1')" class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center">
@@ -14,6 +13,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
         </button>
+
         <div id="section1" class="hidden">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -32,7 +32,15 @@
     <!-- Solicitações para reivindicação de NEs -->
     <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
         <button onclick="toggleAccordion('section2')" class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center">
-            Solicitações de reivindicação de NEs
+            <span>
+                Solicitações de reivindicação de NEs
+                <!-- Contador de solicitações -->
+                {% if claim_count > 0 %}
+                    <span>
+                        {{ claim_count }}
+                    </span>
+                {% endif %}
+            </span>
             <svg id="icon-section1" class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
@@ -91,9 +99,17 @@
     </div>
 
     <!-- Autorizar registro de usuário -->
-         <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
+    <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
         <button onclick="toggleAccordion('section3')" class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center">
-            Solicitações de acesso ao sistema.
+            <span>
+                <!-- Contador de solicitações -->
+                Solicitações de acesso ao sistema
+                {% if user_count > 0 %}
+                    <span>
+                        {{ user_count }}
+                    </span>
+                {% endif %}
+            </span>
             <svg id="icon-section1" class="w-5 h-5 transition-transform duration-300 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>

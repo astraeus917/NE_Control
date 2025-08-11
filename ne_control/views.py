@@ -41,13 +41,16 @@ def list(request):
             # verifica se ja não existe uma solicitação pendente.
             if Claim.objects.filter(user=user, cod_ne=note_ne, status=True).exists():
                 messages.warning(request, "Aguardando autorização do Gestor!")
+                return redirect('list')
 
             else:
                 Claim.objects.create(user=user, cod_ne=note_ne)
                 messages.success(request, f"{note_ne} Reivindicada com sucesso!")
+                return redirect('list')
 
         except Exception as error:
             messages.error(request, f"Erro ao reivindicar! {str(error)}")
+            return redirect('list')
 
     return render(request, 'ne_control/list.html', context)
 
@@ -99,6 +102,7 @@ def show(request, pk):
 
         else:
             messages.error(request, "Erro ao registrar medida!")
+            return redirect('show')
 
     return render(request, 'ne_control/show.html', context)
 
@@ -109,10 +113,16 @@ def manage(request):
     # Informações necessarias para passar no contexto.
     claim_list = Claim.objects.filter(status=True)
     user_list = User.objects.filter(is_active=False)
+
+    # Contagem de usuarios e claims.
+    user_count = user_list.count()
+    claim_count = claim_list.count()
     
     context = {
         'claim_list': claim_list,
-        'user_list': user_list
+        'user_list': user_list,
+        'claim_count': claim_count,
+        'user_count': user_count
     }
 
     if not request.user.role == 'admin':
@@ -158,6 +168,7 @@ def manage(request):
                     }
                 )
             messages.success(request, "Importação concluída com sucesso!")
+            return redirect('manage')
 
             # return redirect("list")  # redireciona para a lista de NEs.
 
@@ -178,9 +189,11 @@ def manage(request):
                 claim.save()
 
                 messages.success(request, "Solicitação autorizada!")
+                return redirect('manage')
 
             except Exception as error:
                 messages.error(request, error)
+                return redirect('manage')
 
         # Negar a solicitação.
         elif request.POST.get('form_type') == 'form3':
@@ -191,9 +204,11 @@ def manage(request):
                 claim.status = False
                 claim.save()
                 messages.warning(request, "Solicitação negada!")
+                return redirect('manage')
 
             except Exception as error:
                 messages.error(request, error)
+                return redirect('manage')
 
         # Autorizar usuario.
         elif request.POST.get('form_type') == 'form4':
@@ -204,9 +219,11 @@ def manage(request):
                 user.is_active = True
                 user.save()
                 messages.success(request, f"Usuário {user} autorizado!")
+                return redirect('manage')
 
             except Exception as error:
                 messages.error(request, error)
+                return redirect('manage')
 
 
         # Negar usuario.
@@ -217,9 +234,11 @@ def manage(request):
                 user = User.objects.get(pk=user_id)
                 user.delete()
                 messages.success(request, f"Usuário {user} negado e deletado!")
+                return redirect('manage')
 
             except Exception as error:
                 messages.error(request, error)
+                return redirect('manage')
 
     return render(request, "ne_control/manage.html", context)
 
