@@ -56,7 +56,7 @@
             >
             {% if user.role == 'admin' %}
             <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" href="{% url 'manage' %}">Gestão</a>
-            <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" href="{% url 'admin:index' %}">Administração</a>
+            <a target="_blank" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" href="{% url 'admin:index' %}">Administração</a>
             {% endif %}
           </div>
         </div>
