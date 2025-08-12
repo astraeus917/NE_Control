@@ -14,14 +14,13 @@ class NoteNE(models.Model): # NE.
     ug = models.BigIntegerField()
     pi = models.CharField(max_length=200)
     nd = models.BigIntegerField()
-    dias = models.IntegerField()
+    data = models.DateField()
     a_liquidar = models.DecimalField(max_digits=10, decimal_places=2)
     liquidado_pagar = models.DecimalField(max_digits=10, decimal_places=2)
     total_pagar = models.DecimalField(max_digits=10, decimal_places=2)
     pago = models.DecimalField(max_digits=10, decimal_places=2)
     # responsavel = models.ForeignKey(Responsible, on_delete=models.SET_NULL, null=True)
     responsavel = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
-    data_contato = models.CharField(max_length=10)
 
     def __str__(self):
         return self.cod_ne

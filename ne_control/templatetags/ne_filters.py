@@ -1,4 +1,5 @@
 from django import template
+from datetime import datetime, date
 
 register = template.Library()
 
@@ -18,5 +19,11 @@ def br_date(value):
     except AttributeError:
         return value
 
-
+@register.filter
+def days_since(value):
+    if not value:
+        return ""
+    today = date.today()
+    diff = (today - value).days
+    return abs(diff)  # força sempre positivo
 

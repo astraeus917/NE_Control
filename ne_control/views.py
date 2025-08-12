@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from .models import NoteNE, ActionTaken, Claim
 from .forms import ActionTakenForm
 from decimal import Decimal
+from datetime import datetime
 
 # Seta o User do get_user_model, por conta de ser um modelo personalizado.
 User = get_user_model()
@@ -153,19 +154,23 @@ def manage(request):
 
                 # Atualiza ou cria a NE.
                 # Verificar necessidade de apagar NE se ela estiver fora do csv.
+
+                # Converter a data para salvar no banco de dados.
+                data_csv = row['DATA']
+                data_for_db = datetime.strptime(data_csv, "%d/%m/%y").date()
+
                 NoteNE.objects.update_or_create(
                     cod_ne=row["NE"],
                     defaults={
                         "ug": int(row["UG"]),
                         "pi": row["PI"],
                         "nd": int(row["ND"]),
-                        "dias": int(row["DIAS"]),
+                        "data": data_for_db,
                         "a_liquidar": parse_brl(row["A LIQUIDAR"]),
                         "liquidado_pagar": parse_brl(row["LIQUIDADO A PAGAR"]),
                         "total_pagar": parse_brl(row["TOTAL A PAGAR"]),
                         "pago": parse_brl(row["PAGO"]),
                         "responsavel": None,
-                        "data_contato": row["DATA"], # esta como CharField e não como DataField.
                     }
                 )
             messages.success(request, "Importação concluída com sucesso!")
