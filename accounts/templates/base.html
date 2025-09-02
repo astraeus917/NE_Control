@@ -43,12 +43,12 @@
             <a
               class="{% if active_page == 'control' %} border-b-8 border-gray-300 text-white {% endif %} px-3 py-2 text-sm font-medium text-gray-300 hover:border-gray-300 hover:border-b-4 hover:text-white content-center h-full"
               href="{% url 'control' %}"
-              >Minhas NEs</a
+              >{% if user.role == 'admin' %}Todas as NEs{% else %}Minhas NEs{% endif %}</a
             >
             <a
               class="{% if active_page == 'list' %} border-b-8 border-gray-300 text-white {% endif %} px-3 py-2 text-sm font-medium text-gray-300 hover:border-gray-300 hover:border-b-4 hover:text-white content-center h-full"
               href="{% url 'list' %}"
-              >Todas as NEs</a
+              >{% if user.role == 'admin' %}NEs para Reivindicar{% else %}Todas as NEs{% endif %}</a
             >
             {% if user.role == 'admin' %}
             <a

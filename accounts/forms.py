@@ -1,4 +1,5 @@
 from django import forms
+from .models import Workplace
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -34,6 +35,14 @@ class RegisterForm(forms.Form):
         widget=forms.PasswordInput(attrs={
             'class': 'w-full px-4 py-2 bg-gray-150 rounded-md',
             'placeholder': 'Confirme sua senha de acesso'
+        })
+    )
+    workplace = forms.ModelChoiceField(
+        queryset=Workplace.objects.all(),
+        required=False,
+        empty_label="Selecione sua seção",
+        widget=forms.Select(attrs={
+            'class': 'w-full px-4 py-2 bg-gray-150 rounded-md'
         })
     )
 

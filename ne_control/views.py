@@ -60,7 +60,11 @@ def list(request):
 @user_passes_test(is_user_active)
 @login_required
 def control(request):
-    notes_ne = NoteNE.objects.filter(responsavel=request.user).prefetch_related('actions_taken')
+    if request.user.role == 'admin':
+        notes_ne = NoteNE.objects.all().prefetch_related('actions_taken')
+    else:
+        notes_ne = NoteNE.objects.filter(responsavel=request.user).prefetch_related('actions_taken')
+    
     context = {
         'notes_ne': notes_ne,
         'active_page': 'control'
