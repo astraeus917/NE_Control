@@ -51,10 +51,6 @@
               >Todas as NEs</a
             >
             {% if user.role == 'admin' %}
-<<<<<<< HEAD
-            <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" href="{% url 'manage' %}">Gestão</a>
-            <a target="_blank" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" href="{% url 'admin:index' %}">Administração</a>
-=======
             <a
               class="{% if active_page == 'manage' %} border-b-8 border-gray-300 text-white {% endif %} px-3 py-2 text-sm font-medium text-gray-300 hover:border-gray-300 hover:border-b-4 hover:text-white content-center h-full"
               href="{% url 'manage' %}"
@@ -65,7 +61,6 @@
               href="{% url 'admin:index' %}"
               >Administração</a
             >
->>>>>>> 2062d84c370bf3caa394cd2e9a4eadf9104f4f6f
             {% endif %}
           </div>
         </div>
