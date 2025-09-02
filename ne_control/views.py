@@ -15,7 +15,7 @@ User = get_user_model()
 
 # Função para verificar se usuário é ativo.
 def is_user_active(user):
-    return user.is_active
+    return user.is_authenticated and user.is_active
 
 
 def parse_brl(value):
@@ -23,8 +23,7 @@ def parse_brl(value):
     return Decimal(value.replace(".", "").replace(",", "."))
 
 
-@user_passes_test(is_user_active)
-@login_required
+@user_passes_test(is_user_active, login_url='login')
 def list(request):
     # Busca informações no banco de dados para o contexto.
     notes_ne = NoteNE.objects.filter(responsavel__isnull=True)
@@ -57,11 +56,10 @@ def list(request):
     return render(request, 'ne_control/list.html', context)
 
 
-@user_passes_test(is_user_active)
-@login_required
+@user_passes_test(is_user_active, login_url='login')
 def control(request):
     if request.user.role == 'admin':
-        notes_ne = NoteNE.objects.all().prefetch_related('actions_taken')
+        notes_ne = NoteNE.objects.filter(responsavel__isnull=False).prefetch_related('actions_taken')
     else:
         notes_ne = NoteNE.objects.filter(responsavel=request.user).prefetch_related('actions_taken')
     
@@ -73,8 +71,7 @@ def control(request):
     return render(request, 'ne_control/control.html', context)
 
 
-@user_passes_test(is_user_active)
-@login_required
+@user_passes_test(is_user_active, login_url='login')
 def show(request, pk):
     # Busca informações no Banco de Dados para passar no contexto.
     form = ActionTakenForm()
@@ -114,8 +111,7 @@ def show(request, pk):
     return render(request, 'ne_control/show.html', context)
 
 
-@user_passes_test(is_user_active)
-@login_required
+@user_passes_test(is_user_active, login_url='login')
 def manage(request):
     # Informações necessarias para passar no contexto.
     claim_list = Claim.objects.filter(status=True)
@@ -142,11 +138,12 @@ def manage(request):
         if request.POST.get('form_type') == 'form1' and request.FILES.get("csv_file"):
             csv_file = request.FILES["csv_file"]
 
-            # Verifica se um arquivo .csv foi anexado para importação.
-            if not csv_file.name.endswith(".csv"):
-                return render(request, "ne_control/import.html", {"error": "Arquivo inválido."})
+            # # Verifica se um arquivo .csv foi anexado para importação.
+            # if not csv_file.name.endswith(".csv"):
+            #     return render(request, "ne_control/import.html", {"error": "Arquivo inválido."})
 
             # Faz a leitura do .csv para importar pro Banco de Dados.
+            print(">>> TYPE REQUEST:", type(request))
             decoded_file = csv_file.read().decode("utf-8-sig")
             io_string = io.StringIO(decoded_file)
             reader = csv.DictReader(io_string)
@@ -163,6 +160,11 @@ def manage(request):
                 # Verificar necessidade de apagar NE se ela estiver fora do csv.
 
                 # Converter a data para salvar no banco de dados.
+                
+                # Verificar se a linha tem o campo chave 'NE'.
+                if not row['NE']:
+                    continue 
+
                 data_csv = row['DATA']
                 data_for_db = datetime.strptime(data_csv, "%d/%m/%y").date()
 
