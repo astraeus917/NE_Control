@@ -148,6 +148,9 @@ def manage(request):
             io_string = io.StringIO(decoded_file)
             reader = csv.DictReader(io_string)
 
+            # Lista das NEs do csv.
+            csv_ne_list = []
+
             for row in reader:
                 # Codigo para buscar o responsavel no csv.
                 # responsavel_nome = row["responsavel"].strip()
@@ -163,7 +166,9 @@ def manage(request):
                 
                 # Verificar se a linha tem o campo chave 'NE'.
                 if not row['NE']:
-                    continue 
+                    continue
+
+                csv_ne_list.append(row['NE']) # Adiciona na lista, para dps comparar e deletar NEs antigas.
 
                 data_csv = row['DATA']
                 data_for_db = datetime.strptime(data_csv, "%d/%m/%y").date()
@@ -182,6 +187,9 @@ def manage(request):
                         "responsavel": None,
                     }
                 )
+
+            NoteNE.objects.exclude(cod_ne__in=csv_ne_list).delete()
+
             messages.success(request, "Importação concluída com sucesso!")
             return redirect('manage')
 
