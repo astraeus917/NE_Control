@@ -28,7 +28,8 @@ def list(request):
     # Busca informações no banco de dados para o contexto.
     notes_ne = NoteNE.objects.filter(responsavel__isnull=True)
     context = {
-        'notes_ne': notes_ne
+        'notes_ne': notes_ne,
+        'active_page': 'list'
     }
 
     if request.method == 'POST':
@@ -123,7 +124,9 @@ def manage(request):
         'claim_list': claim_list,
         'user_list': user_list,
         'claim_count': claim_count,
-        'user_count': user_count
+        'user_count': user_count,
+        'active_page': 'manage'
+
     }
 
     if not request.user.role == 'admin':

@@ -1,133 +1,174 @@
-{% extends 'base.html' %}
-
-{% load ne_filters %}
-
-{% block title %}Controle de Notas de Empenho{% endblock %}
-
+{% extends 'base.html' %} 
+{% load ne_filters %} 
+{% block title %}Controle de Notas de Empenho{% endblock %} 
 {% block content %}
-
-<div class="p-6">
-    <div class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6">
-
-        <!-- Cabeçalho, Pesquisar e Adicionar Nota -->
-        <div class="mb-4 flex flex-col md:flex-row justify-between gap-4">
-            <input id="search" type="text" placeholder="Pesquisar NE ou Responsável..."
-                class="border border-gray-300 rounded-lg px-4 py-2 w-full md:w-1/3" />
-        </div>
-
-        <!-- Menu da lista das NEs -->
-        <table class="min-w-full text-sm text-left border border-gray-300">
-            <!-- Campos da lista. -->
-            <thead class="bg-gray-200 text-gray-700">
-                <tr>
-                    <th class="px-4 py-2 border">UG</th>
-                    <th class="px-4 py-2 border">PI</th>
-                    <th class="px-4 py-2 border">ND</th>
-                    <th class="px-4 py-2 border">NE</th>
-                    <th class="px-4 py-2 border">DIAS</th>
-                    <th class="px-4 py-2 border">A LIQUIDAR</th>
-                    <th class="px-4 py-2 border">LIQUIDADO A PAGAR</th>
-                    <th class="px-4 py-2 border">TOTAL A PAGAR</th>
-                    <th class="px-4 py-2 border">PAGO</th>
-                    <th class="px-4 py-2 border">RESPONSÁVEL</th>
-                    <th class="px-4 py-2 border">DATA CONTATO</th>
-                    <th class="px-4 py-2 border">HISTÓRICO MEDIDAS</th>
-                </tr>
-            </thead>
-
-            <!-- Informações da lista. -->
-            <tbody>
-                {% for note_ne in notes_ne %}
-                <tr class="table-line hover:bg-gray-100">
-                    <td class="px-4 py-2 border">{{ note_ne.ug }}</td>
-                    <td class="px-4 py-2 border">{{ note_ne.pi }}</td>
-                    <td class="px-4 py-2 border">{{ note_ne.nd }}</td>
-                    <td class="px-4 py-2 border">{{ note_ne.cod_ne }}</td>
-                    <td class="px-4 py-2 border">{{ note_ne.dias }}</td>
-                    <td class="px-4 py-2 border">{{ note_ne.a_liquidar|brl }}</td>
-                    <td class="px-4 py-2 border">{{ note_ne.liquidado_pagar|brl }}</td>
-                    <td class="px-4 py-2 border">{{ note_ne.total_pagar|brl }}</td>
-                    <td class="px-4 py-2 border">{{ note_ne.pago|brl }}</td>
-                    <td class="px-4 py-2 border">{{ note_ne.responsavel }}</td>
-                    <td class="px-4 py-2 border">{{ note_ne.data_contato }}</td>
-
-                    <!-- Botão que ao se expandir mostra a ultima medida tomada -->
-                    <td class="px-2 py-2 border">
-                        <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
-                            type="button" data-target="measure-{{ forloop.counter }}">
-                            HISTÓRICO
-                        </button>
-                    </td>
-                </tr>
-
-                {% with action=note_ne.actions_taken.last %}
-                {% if action %}
-                <tr id="measure-{{ forloop.counter }}" class="hidden hover:bg-gray-100">
-                    <td colspan="3" class="px-6 py-4 border">Responsável: {{ action.responsible }}</td>
-                    <td colspan="1" class="px-6 py-4 border">Data Contato: {{ action.date|br_date }}</td>
-                    <td colspan="2" class="px-6 py-4 border">Medida Tomada: {{ action.description }}</td>
-                    <td colspan="3" class="px-6 py-4 border">Previsão Entrega: {{ action.previ_date|br_date }}</td>
-                    <td colspan="3" class="px-6 py-4 border">
-                        <ul>
-                            <li>
-                                <a href="{% url 'show' note_ne.cod_ne %}#action_form"
-                                    class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-                                    Cadastrar nova medida
-                                </a>
-                            </li><br>
-                            <li>
-                                <a href="{% url 'show' note_ne.cod_ne %}"
-                                    class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-                                    Visualização Detalhada
-                                </a>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-                {% else %}
-                <tr id="measure-{{ forloop.counter }}" class="hidden hover:bg-gray-100">
-                    <td colspan="12" class="px-6 py-4 text-gray-500 border text-center">
-                        Nenhuma medida registrada.
-                        <a href="{% url 'show' note_ne.cod_ne %}#action_form"
-                            class="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                            Cadastrar nova medida
-                        </a>
-                    </td>
-                </tr>
-                {% endif %}
-                {% endwith %}
-                {% endfor %}
-            </tbody>
-        </table>
+<div class="pt-4">
+  <div
+    class="max-w-full overflow-auto bg-white rounded-2xl shadow-md p-6"
+  >
+    <!-- Cabeçalho, Pesquisar e Adicionar Nota -->
+    <div class="mb-4 flex flex-col md:flex-row justify-between gap-4">
+      <input
+        id="search"
+        type="text"
+        placeholder="Pesquisar NE ou Responsável..."
+        class="border border-gray-300 rounded-lg px-4 py-2 w-full md:w-1/3 focus:shadow-md outline-none focus:shadow-gray-500/50"
+      />
     </div>
+
+    <!-- Menu da lista das NEs -->
+    <table class="min-w-full text-sm text-left border-gray-300 rounded-lg">
+      <!-- Campos da lista. -->
+      <thead class="bg-gray-200 text-gray-700 text-center rounded-t-lg">
+        <tr>
+          <th class="px-4 py-2">UG</th>
+          <th class="px-4 py-2">PI</th>
+          <th class="px-4 py-2">ND</th>
+          <th class="px-4 py-2 ">NE</th>
+          <th class="px-4 py-2">DIAS</th>
+          <th class="px-4 py-2">A LIQUIDAR (R$)</th>
+          <th class="px-4 py-2">LIQUIDADO A PAGAR (R$)</th>
+          <th class="px-4 py-2">TOTAL A PAGAR (R$)</th>
+          <th class="px-4 py-2">PAGO (R$)</th>
+          <th class="px-4 py-2">RESPONSÁVEL</th>
+          <th class="px-4 py-2">DATA CONTATO</th>
+          <th class="px-4 py-2">MEDIDAS TOMADAS</th>
+        </tr>
+      </thead>
+
+      <!-- Informações da lista. -->
+      <tbody>
+        {% for note_ne in notes_ne %}
+        <tr
+          id="row-{{ forloop.counter }}"
+          class="table-line bg-gray-50 hover:bg-gray-100 text-center border-b"
+        >
+          <td class="px-4 py-2">{{ note_ne.ug }}</td>
+          <td class="px-4 py-2">{{ note_ne.pi }}</td>
+          <td class="px-4 py-2">{{ note_ne.nd }}</td>
+          <td class="px-4 py-2">{{ note_ne.cod_ne }}</td>
+          <td class="px-4 py-2">{{ note_ne.dias }}</td>
+          <td class="px-4 py-2">{{ note_ne.a_liquidar|brl }}</td>
+          <td class="px-4 py-2">{{ note_ne.liquidado_pagar|brl }}</td>
+          <td class="px-4 py-2">{{ note_ne.total_pagar|brl }}</td>
+          <td class="px-4 py-2">{{ note_ne.pago|brl }}</td>
+          <td class="px-4 py-2">{{ note_ne.responsavel }}</td>
+          <td class="px-4 py-2">{{ note_ne.data_contato }}</td>
+
+          <!-- Botão que ao se expandir mostra a ultima medida tomada -->
+          <td class="px-2 py-2">
+            <button
+              class="text-white px-6 py-2 hover:bg-blue-700 rounded-lg toggle-measure bg-blue-800 shadow-md"
+              type="button"
+              data-target="measure-{{ forloop.counter }}"
+            >
+              Visualizar
+            </button>
+          </td>
+        </tr>
+
+        {% with action=note_ne.actions_taken.last %} {% if action %}
+        <tr
+          id="measure-{{ forloop.counter }}"
+          class="rounded-md hidden border-l-4 border-gray-800"
+        >
+          <td colspan="99" class="px-4">
+            <div class="flex flex-col justify-between w-full mb-4">
+              <div class="flex justify-center text-gray-500">
+                <div class="justify-center py-2 font-medium">
+                  ÚLTIMA MEDIDA TOMADA NE {{ note_ne.cod_ne }}
+                </div>
+              </div>
+              <div class="grid grid-cols-12 content-center">
+                  <div class="flex flex-col col-span-2 space-y-2">
+                    <div class="px-4 flex flex-col">
+                      <div class="text-xs text-gray-700">Responsável:</div> 
+                      <div class="text-sm">{{ action.responsible }}</div>
+                    </div>
+                    <div class="px-4 flex flex-col">
+                      <div class="text-xs text-gray-700">Data Contato:</div>
+                      <div class="text-sm">{{ action.date|br_date }}</div>
+                    </div>
+                    <div class="px-4 flex flex-col">
+                      <div class="text-xs text-gray-700">Previsão Entrega:</div>
+                      <div class="text-sm">{{ action.previ_date|br_date }}</div>
+                    </div>
+                  </div>
+                  <div class="flex flex-col col-span-9">
+                    <div class="text-xs text-gray-700">
+                      Descrição
+                    </div>
+                    <div class="px-4 py-2 border-l-2 border-gray-200 h-full text-sm">
+                      {{ action.description }}
+                    </div>
+                  </div>
+                  <div class="col-span-1 text-center w-full flex flex-col self-center">
+                    <div class="flex flex-col content-center space-y-2">
+                      <a href="{% url 'show' note_ne.cod_ne %}#action_form" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700">
+                        nova medida
+                      </a>
+                      <a href="{% url 'show' note_ne.cod_ne %}" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700" >
+                        visualizar todas
+                      </a>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr id="measure-{{ forloop.counter }}" class="hidden hover:bg-gray-100">
+          <td
+            colspan="99"
+            class="px-8 py-2 text-gray-500 border-b-2 border-l-2 border-r-2 bg-gray-200"
+          >
+            <div class="flex flex-col justify-center w-full">
+              <div class="flex px-4 justify-center">
+                Nenhuma medida registrada. Deseja cadastrar nova medida?
+              </div>
+              <div class="flex px-4 justify-center">
+                <a
+                  href="{% url 'show' note_ne.cod_ne %}#action_form"
+                  class="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                >
+                  Cadastrar nova medida
+                </a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endif %} {% endwith %} {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script>
-    // Mostrar a ultima medida tomada.
-    document.querySelectorAll('.toggle-measure').forEach(button => {
-        button.addEventListener('click', () => {
-            const targetId = button.getAttribute('data-target');
-            const targetRow = document.getElementById(targetId);
-            if (targetRow) {
-                targetRow.classList.toggle('hidden');
-            }
-        });
+  // Mostrar a ultima medida tomada.
+  document.querySelectorAll(".toggle-measure").forEach((button) => {
+    button.addEventListener("click", () => {
+      const targetId = button.getAttribute("data-target");
+      const targetRow = document.getElementById(targetId);
+      if (targetRow) {
+        targetRow.classList.toggle("hidden");
+      }
     });
+  });
 
-    // Função do pesquisar.
-    document.getElementById("search").addEventListener("input", function () {
-        const term = this.value.toLowerCase();
-        const lines = document.querySelectorAll(".table-line");
+  // Função do pesquisar.
+  document.getElementById("search").addEventListener("input", function () {
+    const term = this.value.toLowerCase();
+    const lines = document.querySelectorAll(".table-line");
 
-        lines.forEach((line) => {
-            const text = line.textContent.toLowerCase();
-            if (text.includes(term)) {
-                line.style.display = "";
-            } else {
-                line.style.display = "none";
-            }
-        });
+    lines.forEach((line) => {
+      const text = line.textContent.toLowerCase();
+      if (text.includes(term)) {
+        line.style.display = "";
+      } else {
+        line.style.display = "none";
+      }
     });
+  });
 </script>
 
 {% endblock %}
