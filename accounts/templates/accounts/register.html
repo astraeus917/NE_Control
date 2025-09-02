@@ -4,26 +4,33 @@
 
 {% block content %}
 
-<div class="flex items-center justify-center min-h-screen overflow-hidden">
-    <div class="w-full max-w-sm p-6 bg-white rounded-xl shadow-md">
-        <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Registrar Usuário</h2>
+{% load static %}
 
-        <form method="POST">
-            {% csrf_token %}
+<div class="flex items-center justify-center h-screen">
+    <div class=" bg-gray-900 rounded-xl shadow-md h-3/4 w-1/2 grid grid-cols-4">
+        <div class="col-start-2 col-span-2 flex-col p-6 bg-gray-900 h-full justify-center content-center">
+            <img class="h-32 w-32 self-center" src="{% static 'img\logo.png' %}" alt="">
+            <h2 class="text-2xl text-center mb-6 text-white self-center">Registrar novo usuário ao sistema</h2>
+            <p class="text-white">Após solicitar a criação do usuário, entre em contato com o administrador para realizar o login no sistema</p>
 
-            <label for="{{ form.username.id_for_label }}" class="block text-gray-700">Usuário:</label>
-            {{ form.username }}
+            <form class="self-center w-full space-y-2" method="POST">
+                {% csrf_token %}
 
-            <label for="{{ form.password.id_for_label }}" class="block text-gray-700">Senha:</label>
-            {{ form.password }}
+                <label for="{{ form.username.id_for_label }}" class="block text-gray-100">Usuário:</label>
+                {{ form.username }}
 
-            <label for="{{ form.confirm_password.id_for_label }}" class="block text-gray-700">Confirme a Senha:</label>
-            {{ form.confirm_password }}
+                <label for="{{ form.password.id_for_label }}" class="block text-gray-100">Senha:</label>
+                {{ form.password }}
 
-            <div>
-                <button type="submit">Registrar</button>
-            </div>
-        </form>
+                <label for="{{ form.confirm_password.id_for_label }}" class="block text-gray-100">Confirme a Senha:</label>
+                {{ form.confirm_password }}
+
+                <div class="w-full mb-6">
+                    <button class="bg-blue-800 shadow-md text-white px-6 py-2 rounded-lg hover:bg-blue-700 w-full mt-4" type="submit">Registrar</button>
+                </div>
+
+                <p class="text-white">Já possui login? <a class="text-blue-700 hover:text-white hover:underline" href="{% url 'login' %}">Clique aqui</a> para acessar o sistema</p>
+            </form>
     </div>
 </div>
 
