@@ -40,7 +40,7 @@
               class="table-line bg-gray-50 hover:bg-gray-100 text-center border-b"
             >
               <td class="px-4 py-2">{{ note_ne.cod_ne }}</td>
-              <td class="px-4 py-2">{{ note_ne.dias }}</td>
+              <td class="px-4 py-2">{{ note_ne.data|days_since }}</td>
               <td class="px-4 py-2">{{ note_ne.a_liquidar|brl }}</td>
               <td class="px-4 py-2">{{ note_ne.liquidado_pagar|brl }}</td>
               <td class="px-4 py-2">{{ note_ne.total_pagar|brl }}</td>

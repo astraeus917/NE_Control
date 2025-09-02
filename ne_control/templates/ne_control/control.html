@@ -39,6 +39,7 @@
       <!-- Informações da lista. -->
       <tbody>
         {% for note_ne in notes_ne %}
+        {% with action=note_ne.actions_taken.last %}
         <tr
           id="row-{{ forloop.counter }}"
           class="table-line bg-gray-50 hover:bg-gray-100 text-center border-b"
@@ -47,13 +48,13 @@
           <td class="px-4 py-2">{{ note_ne.pi }}</td>
           <td class="px-4 py-2">{{ note_ne.nd }}</td>
           <td class="px-4 py-2">{{ note_ne.cod_ne }}</td>
-          <td class="px-4 py-2">{{ note_ne.dias }}</td>
+          <td class="px-4 py-2">{{ note_ne.data|days_since }}</td>
           <td class="px-4 py-2">{{ note_ne.a_liquidar|brl }}</td>
           <td class="px-4 py-2">{{ note_ne.liquidado_pagar|brl }}</td>
           <td class="px-4 py-2">{{ note_ne.total_pagar|brl }}</td>
           <td class="px-4 py-2">{{ note_ne.pago|brl }}</td>
           <td class="px-4 py-2">{{ note_ne.responsavel }}</td>
-          <td class="px-4 py-2">{{ note_ne.data_contato }}</td>
+          <td class="px-4 py-2">{{ action.date|br_date }}</td>
 
           <!-- Botão que ao se expandir mostra a ultima medida tomada -->
           <td class="px-2 py-2">
@@ -67,7 +68,7 @@
           </td>
         </tr>
 
-        {% with action=note_ne.actions_taken.last %} {% if action %}
+        {% if action %}
         <tr
           id="measure-{{ forloop.counter }}"
           class="rounded-md hidden border-l-4 border-gray-800"

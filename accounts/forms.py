@@ -42,7 +42,7 @@ class RegisterForm(forms.Form):
         required=False,
         empty_label="Selecione sua seção",
         widget=forms.Select(attrs={
-            'class': 'w-full px-4 py-2 bg-gray-150 rounded-md'
+            'class': 'w-full px-4 py-2 bg-gray-150 rounded-md text-gray-100'
         })
     )
 
