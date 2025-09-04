@@ -27,31 +27,53 @@ def parse_brl(value):
 def list(request):
     # Busca informações no banco de dados para o contexto.
     notes_ne = NoteNE.objects.filter(responsavel__isnull=True)
+    users = User.objects.all()
     context = {
         'notes_ne': notes_ne,
-        'active_page': 'list'
+        'active_page': 'list',
+        'users': users
     }
 
     if request.method == 'POST':
         cod_ne = request.POST.get('cod_ne')
+        btn_action = request.POST.get('btn_action')
+        note_ne = NoteNE.objects.get(pk=cod_ne)
 
-        try:
-            user = request.user
-            note_ne = NoteNE.objects.get(pk=cod_ne)
+        if btn_action == 'delegar':
+            try:
+                # Pega o id do usuario selecionado.
+                responsible_id = request.POST.get('responsible')
+                if responsible_id == 'none':
+                    messages.warning(request, "Você precisar selecionar um responsável")
+                
+                else:
+                    responsible = User.objects.get(id=responsible_id)
+                    note_ne = NoteNE.objects.get(pk=cod_ne)
+                    note_ne.responsavel = responsible
+                    note_ne.save()
+                    messages.success(request, "NE delegada com sucesso!")
 
-            # verifica se ja não existe uma solicitação pendente.
-            if Claim.objects.filter(user=user, cod_ne=note_ne, status=True).exists():
-                messages.warning(request, "Aguardando autorização do Gestor!")
+            except Exception as error:
+                messages.error(request, "Erro ao delegar NE!")
+
+        else:
+            try:
+                # Pega o username do usuario que solicitou a reivindicação.
+                user = request.user
+
+                # verifica se ja não existe uma solicitação pendente.
+                if Claim.objects.filter(user=user, cod_ne=note_ne, status=True).exists():
+                    messages.warning(request, "Aguardando autorização do Gestor!")
+                    return redirect('list')
+
+                else:
+                    Claim.objects.create(user=user, cod_ne=note_ne)
+                    messages.success(request, f"{note_ne} Reivindicada com sucesso!")
+                    return redirect('list')
+
+            except Exception as error:
+                messages.error(request, f"Erro ao reivindicar! {str(error)}")
                 return redirect('list')
-
-            else:
-                Claim.objects.create(user=user, cod_ne=note_ne)
-                messages.success(request, f"{note_ne} Reivindicada com sucesso!")
-                return redirect('list')
-
-        except Exception as error:
-            messages.error(request, f"Erro ao reivindicar! {str(error)}")
-            return redirect('list')
 
     return render(request, 'ne_control/list.html', context)
 

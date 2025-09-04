@@ -27,6 +27,7 @@
             <th class="px-4 py-2">LIQUIDADO A PAGAR (R$)</th>
             <th class="px-4 py-2">TOTAL A PAGAR (R$)</th>
             <th class="px-4 py-2">PAGO (R$)</th>
+            <th class="px-4 py-2">RESPONSÁVEL</th>
             <th class="px-4 py-2"></th>
           </tr>
         </thead>
@@ -47,6 +48,17 @@
               <td class="px-4 py-2">{{ note_ne.liquidado_pagar|brl }}</td>
               <td class="px-4 py-2">{{ note_ne.total_pagar|brl }}</td>
               <td class="px-4 py-2">{{ note_ne.pago|brl }}</td>
+              
+              {% if user.role == 'admin' %}
+              <td class="px-4 py-2">
+                <select class="w-full border text-gray-700 border-gray-300 rounded px-3 py-2" name="responsible" id="responsible">
+                  <option value="none">Selecionar</option>
+                  {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                  {% endfor %}
+                </select>
+              </td>
+              {% endif %}
 
               <td class="px-2 py-2">
                 <!-- Codigo do NE a ser reivindicado -->
@@ -56,13 +68,26 @@
                   name="cod_ne"
                   value="{{ note_ne.cod_ne }}"
                 />
-
-                <button
-                  class="bg-blue-800 shadow-md text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
-                  type="submit"
-                >
-                  Reivindicar
-                </button>
+                
+                {% if user.role == 'admin' %}
+                  <button
+                    class="bg-blue-800 shadow-md text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                    type="submit"
+                    name="btn_action"
+                    value="delegar"
+                  >
+                    Delegar
+                  </button>
+                {% else %}
+                  <button
+                    class="bg-blue-800 shadow-md text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                    type="submit"
+                    name="btn_action"
+                    value="reivindicar"
+                  >
+                    Reivindicar
+                  </button>
+                {% endif %}
               </td>
             </tr>
           </form>
