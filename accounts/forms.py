@@ -46,5 +46,17 @@ class RegisterForm(forms.Form):
         })
     )
 
-
+class ChangePasswordForm(forms.Form):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'w-xl px-4 py-2 bg-gray-150 rounded-md',
+            'placeholder': 'Digite sua senha de acesso'
+        })
+    )
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'w-xl px-4 py-2 bg-gray-150 rounded-md',
+            'placeholder': 'Confirme sua senha de acesso'
+        })
+    )    
 

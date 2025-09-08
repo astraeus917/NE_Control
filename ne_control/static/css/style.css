@@ -1,3 +1,17 @@
 .h-90vh {
     height: 90vh;
 }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    z-index: 1;
+}
+
+.show {display: block;}
+

@@ -27,7 +27,7 @@ def parse_brl(value):
 def list(request):
     # Busca informações no banco de dados para o contexto.
     notes_ne = NoteNE.objects.filter(responsavel__isnull=True)
-    users = User.objects.all()
+    users = User.objects.filter(is_active=True)
     context = {
         'notes_ne': notes_ne,
         'active_page': 'list',

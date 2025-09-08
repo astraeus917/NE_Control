@@ -59,7 +59,8 @@
             <a
               class="px-3 py-2 text-sm font-medium text-gray-300 hover:border-gray-300 hover:border-b-4 hover:text-white content-center h-full"
               href="{% url 'admin:index' %}"
-              >Administração</a
+              target="_blank"
+              >Admin. Avançada</a
             >
             {% endif %}
           </div>
@@ -70,8 +71,24 @@
           class="flex hidden justify-items-end justify-self-end sm:ml-6 sm:block px-3 align-middle"
         >
           <div class="flex h-full space-x-4">
-            <div class="px-3 py-2 text-sm font-medium text-gray-300 content-center">
-              usuário: {{ user }}
+            <!-- Menu drop down de opções do usuário. -->
+            <div class="dropdown bg-blue-700 px-3 py-2 h-10 mt-2 font-medium text-gray-300 rounded-md">
+              <button onclick="myDropdown()" class="dropdown-btn">Usuário: {{ user }}</button>
+              <div id="myDropdown" class="dropdown-content bg-blue-800 mt-3 px-3 py-2 right-0 rounded-md font-medium text-gray-300">
+                <form method="POST" action="{% url 'change_password' %}">
+                  {% csrf_token %}
+                  
+                  <label for="{{ form.password.id_for_label }}" class="block text-gray-100">Nova senha:</label>
+                  {{ form.password }}
+
+                  <label for="{{ form.confirm_password.id_for_label }}" class="block text-gray-100">Confirmar senha:</label>
+                  {{ form.confirm_password }}
+
+                  <div class="w-full mb-6">
+                    <button class="bg-blue-800 shadow-md text-white px-6 py-2 rounded-lg hover:bg-blue-700 w-full mt-4" type="submit">Alterar</button>
+                  </div>
+                </form>
+              </div>
             </div>
 
             <a
@@ -128,6 +145,20 @@
         } else {
           content.classList.add("hidden");
           icon.classList.remove("rotate-180");
+        }
+      }
+
+      // Menu dropdown
+      function myDropdown() {
+        document.getElementById("myDropdown").classList.toggle("show");
+      }
+
+      window.onclick = function(event) {
+        const dropdown = document.getElementById("myDropdown");
+        const button = document.querySelector(".dropdown-btn");
+
+        if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+          dropdown.classList.remove("show");
         }
       }
 

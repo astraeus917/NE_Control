@@ -1,11 +1,29 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, get_user_model, logout
+from django.contrib.auth import authenticate, login, get_user_model, update_session_auth_hash, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, ChangePasswordForm
 
 # Seta o modelo do Usuario, modelo personalizado criado no models.
 User = get_user_model()
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            current_user = request.user
+            password = form.cleaned_data['password']
+            confirm_password = form.cleaned_data['confirm_password']
+
+            if password != confirm_password:
+                messages.error(request, "As senhas não coincidem!")
+            else:
+                current_user.set_password(password)
+                current_user.save()
+                update_session_auth_hash(request, current_user)
+                messages.success(request, "Senha alterada com sucesso!")
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def login_user(request):
