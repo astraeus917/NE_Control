@@ -55,4 +55,39 @@ Existem três tipos principais de empenho:
 ## 📄 Licença
 Este projeto está sob a licença CC-BY-NC-SA-4.0 – veja o arquivo [CC-BY-NC-SA-4.0](CC-BY-NC-SA-4.0) para mais detalhes.
 
+## 💻 Desenvolvedores
+- **[Astraeus](https://github.com/astraeus917)** – Backend
+- **[jhonathandelgado16](https://github.com/jhonathandelgado16)** – Frontend
 
+## ⚠️ Atenção
+O sistema já está em uso dentro da Organização Militar para a qual foi planejado. Estamos aguardando feedback dos usuários para futuras melhorias e ajustes. O projeto ainda não está em sua versão final e possui alguns bugs que serão corrigidos em breve. Agradecemos a atenção!
+
+## Login
+![Tela de login](./imgs/login.png)
+
+## Register
+![Tela de registro](./imgs/register.png)
+
+## Action Taken
+![Tela de ação tomada](./imgs/action-taken.png)
+
+## Action Taken 1
+![Tela de ação tomada 1](./imgs/action-taken-1.png)
+
+## Admin NE Control
+![Tela de controle de NEs (admin)](./imgs/admin-ne-control.png)
+
+## Admin NE Control 1
+![Tela de controle de NEs (admin) - variação 1](./imgs/admin-ne-control-1.png)
+
+## Admin NE List
+![Tela de lista de NEs (admin)](./imgs/admin-ne-list.png)
+
+## Admin NE Manage
+![Tela de gestão de NEs (admin)](./imgs/admin-ne-manage.png)
+
+## Admin NE Manage 1
+![Tela de gestão de NEs (admin) - variação 1](./imgs/admin-ne-manage-1.png)
+
+## Admin NE Manage 2
+![Tela de gestão de NEs (admin) - variação 2](./imgs/admin-ne-manage-2.png)

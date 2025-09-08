@@ -74,7 +74,7 @@
             <!-- Menu drop down de opções do usuário. -->
             <div class="dropdown bg-blue-700 px-3 py-2 h-10 mt-2 font-medium text-gray-300 rounded-md">
               <button onclick="myDropdown()" class="dropdown-btn">Usuário: {{ user }}</button>
-              <div id="myDropdown" class="dropdown-content bg-blue-800 mt-3 px-3 py-2 right-0 rounded-md font-medium text-gray-300">
+              <div id="myDropdown" class="dropdown-content bg-gray-800 mt-3 px-3 py-2 right-0 rounded-md font-medium text-gray-300">
                 <form method="POST" action="{% url 'change_password' %}">
                   {% csrf_token %}
                   
