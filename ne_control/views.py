@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
 from .models import NoteNE, ActionTaken, Claim
+from accounts.models import Workplace
 from .forms import ActionTakenForm
 from decimal import Decimal
 from datetime import datetime
@@ -142,12 +143,18 @@ def manage(request):
     # Contagem de usuarios e claims.
     user_count = user_list.count()
     claim_count = claim_list.count()
+
+    # Usuários ativos e Seções.
+    users = User.objects.filter(is_active=True)
+    workplaces = Workplace.objects.all()
     
     context = {
         'claim_list': claim_list,
         'user_list': user_list,
         'claim_count': claim_count,
         'user_count': user_count,
+        'users': users,
+        'workplaces': workplaces,
         'active_page': 'manage'
 
     }
@@ -185,9 +192,10 @@ def manage(request):
                 # Verificar necessidade de apagar NE se ela estiver fora do csv.
 
                 # Converter a data para salvar no banco de dados.
-                
-                # Verificar se a linha tem o campo chave 'NE'.
-                if not row['NE']:
+
+                required_fields = ["UG", "PI", "ND", "NE", "DATA", "A LIQUIDAR", "LIQUIDADO A PAGAR", "TOTAL A PAGAR", "PAGO"]
+
+                if not all(row.get(field) and row[field].strip() for field in required_fields):
                     continue
 
                 csv_ne_list.append(row['NE']) # Adiciona na lista, para dps comparar e deletar NEs antigas.
@@ -284,8 +292,109 @@ def manage(request):
             except Exception as error:
                 messages.error(request, error)
                 return redirect('manage')
+        
+        # Adicionar nova seção.
+        elif request.POST.get('form_type') == 'form6':
+            workplace = request.POST.get('workplace')
+
+            workplace, created = Workplace.objects.get_or_create(
+                workplace = workplace
+            )
+
+            if created:
+                messages.success(request, "Seção criada com sucesso!")
+                return redirect('manage')
+            
+            else:
+                messages.error(request, "Essa seção já existe!")
+                return redirect('manage')
+
+        # Deletar usuário do sistema.
+        elif request.POST.get('form_type') == 'form7':
+            user_id = request.POST.get('user_id')
+
+            try:
+                user = User.objects.get(pk=user_id)
+                user.delete()
+                messages.success(request, "Usuário deletado com sucesso!")
+                return redirect('manage')
+
+            except Exception as error:
+                messages.error(request, "Erro ao deletar usuário!")
+                return redirect('manage')
+            
+        # Deletar seção do sistema.
+        elif request.POST.get('form_type') == 'form8':
+            workplace_id = request.POST.get('workplace_id')
+
+            try:
+                workplace = Workplace.objects.get(pk=workplace_id)
+                workplace.delete()
+                messages.success(request, "Seção deletada com sucesso!")
+                return redirect('manage')
+
+            except Exception as error:
+                messages.error(request, "Erro ao deletar seção!")
+                return redirect('manage')
 
     return render(request, "ne_control/manage.html", context)
 
+@user_passes_test(is_user_active, login_url='login')
+def user_edit(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    workplaces = Workplace.objects.all()
+    roles = User.ROLE_CHOICES
 
+    context = {
+        'user': user,
+        'workplaces': workplaces,
+        'roles': roles,
+    }
 
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        role = request.POST.get('role')
+        workplace_id = request.POST.get('workplace')
+
+        try:
+            user.username = username
+            if password != '':
+                user.set_password(password)
+            user.role = role
+            if workplace_id:
+                user.workplace = get_object_or_404(Workplace, pk=workplace_id)
+            user.save()
+
+            messages.success(request, "Alterações salvas com sucesso!")
+            return redirect('manage')
+        
+        except Exception as error:
+            messages.error(request, "Não foi possível salvar as alterações!")
+            return redirect('user-edit')
+            
+    return render(request, 'ne_control/user_edit.html', context)
+
+@user_passes_test(is_user_active, login_url='login')
+def workplace_edit(request, pk):
+    workplace = get_object_or_404(Workplace, pk=pk)
+
+    context = {
+        'workplace': workplace,
+    }
+
+    if request.method == 'POST':
+        workplace_name = request.POST.get('workplace')
+
+        try:
+            workplace.workplace = workplace_name
+            workplace.save()
+
+            messages.success(request, "Alterações salvas com sucesso!")
+            return redirect('manage')
+        
+        except Exception as error:
+            messages.error(request, "Não foi possível salvar as alterações!")
+            return redirect('workplace-edit')
+            
+    return render(request, 'ne_control/workplace_edit.html', context)

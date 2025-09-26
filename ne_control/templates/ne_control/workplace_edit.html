@@ -1,0 +1,24 @@
+{% extends 'log_and_reg.html' %}
+
+{% load ne_filters %}
+
+{% block title %} {{workplace.workplace }} {% endblock %}
+
+{% block content %}
+
+<div class="pt-4">
+    <a href="{% url 'manage' %}">Voltar</a>
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="workplace">Nome de Seção:</label>
+        <input type="text" id="workplace" name="workplace" value="{{ workplace.workplace }}">
+
+        <button type="submit">
+            Salvar
+        </button>
+
+    </form>
+</div>
+
+{% endblock %}

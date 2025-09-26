@@ -1,0 +1,45 @@
+{% extends 'log_and_reg.html' %}
+
+{% load ne_filters %}
+
+{% block title %} {{user.username }} {% endblock %}
+
+{% block content %}
+
+<div class="pt-4">
+    <a href="{% url 'manage' %}">Voltar</a>
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="username">Nome de Usuário:</label>
+        <input type="text" id="username" name="username" value="{{ user.username }}">
+
+        <label for="password">Senha de Acesso:</label>
+        <input type="password" id="password" name="password">
+
+        <label for="role">Cargo</label>
+        <select name="role" id="role">
+            {% for value, label in roles %}
+                <option value="{{ value }}" {% if user.role == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="workplace">Seção:</label>
+        <select name="workplace" id="workplace">
+            {% for workplace in workplaces %}
+                <option value="{{ workplace.id }}" {% if user.workplace.id == workplace.id %}selected{% endif %}>
+                    {{ workplace }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">
+            Salvar
+        </button>
+
+    </form>
+</div>
+
+{% endblock %}

@@ -255,5 +255,204 @@
       {% endif %}
     </div>
   </div>
+
+  <!-- Adicionar seção no sistema -->
+  <div class="w-1/2 bg-white rounded-2xl shadow-sm p-6">
+    <button
+      onclick="toggleAccordion('section4')"
+      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center"
+    >
+      <span class="flex justify-between w-full content-center">
+        Adicionar nova seção no sistema
+      </span>
+      <svg
+          id="icon-section4"
+          class="w-5 h-5 transition-transform duration-300 transform"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 9l-7 7-7-7"
+        />
+      </svg>
+    </button>
+    <div id="section4" class="hidden">
+      <form method="POST">
+        {% csrf_token %}
+        <input
+          class="w-full border border-gray-300 rounded px-3 py-2"
+          placeholder="Digite o nome da seção"
+          type="text"
+          name="workplace"
+        >
+        <button
+          class="bg-blue-600 text-white mt-2 px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+          type="submit"
+          name="form_type"
+          value="form6"
+        >
+          Salvar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lista de usuários do sistema -->
+  <div class="w-1/2 bg-white rounded-2xl shadow-sm p-6">
+    <button
+      onclick="toggleAccordion('section5')"
+      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center"
+    >
+      <span class="flex justify-between w-full content-center">
+        Lista de Usuários do sistema
+      </span>
+      <svg
+        id="icon-section5"
+        class="w-5 h-5 transition-transform duration-300 transform"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 9l-7 7-7-7"
+        />
+      </svg>
+    </button>
+    <div id="section5" class="hidden">
+      <table class="mt-4 min-w-full text-sm text-left text-center">
+        <!-- Campos da lista -->
+        <thead class="text-gray-700 border-b-2 border-gray-500">
+          <tr>
+            <th class="px-4 py-4 w-1/3">Nome do Usuário</th>
+            <th class="px-4 py-4 w-1/3">Cargo</th>
+            <th class="px-4 py-4 w-1/3">Seção</th>
+            <th class="px-4 py-4 w-1/3">Ação</th>
+          </tr>
+        </thead>
+
+        <!-- Informações da lista -->
+        <tbody>
+          {% for user in users %}
+          <tr class="table-line hover:bg-gray-100 border-b bg-gray-50">
+            <td class="px-4 py-2">{{ user }}</td>
+            <td class="px-4 py-2">{{ user.role }}</td>
+            <td class="px-4 py-2">{{ user.workplace }}</td>
+
+            <!-- Excluir ou editar -->
+            <td class="px-4 py-2 flex flex-row space-x-1 justify-center">
+              <form method="POST">
+                {% csrf_token %} {{ form7 }}
+
+                <input
+                  class="hidden"
+                  type="text"
+                  name="user_id"
+                  value="{{ user.id }}"
+                />
+
+                <button
+                  class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 toggle-measure"
+                  type="submit"
+                  name="form_type"
+                  value="form7"
+                >
+                  Deletar
+                </button>
+              </form>
+              <a
+                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                href="{% url 'user-edit' user.id %}"
+              >
+                Editar
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Lista de seções do sistema -->
+  <div class="w-1/2 bg-white rounded-2xl shadow-sm p-6">
+    <button
+      onclick="toggleAccordion('section6')"
+      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center"
+    >
+      <span class="flex justify-between w-full content-center">
+        Lista de Seções do sistema
+      </span>
+      <svg
+        id="icon-section6"
+        class="w-5 h-5 transition-transform duration-300 transform"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 9l-7 7-7-7"
+        />
+      </svg>
+    </button>
+    <div id="section6" class="hidden">
+      <table class="mt-4 min-w-full text-sm text-left text-center">
+        <!-- Campos da lista -->
+        <thead class="text-gray-700 border-b-2 border-gray-500">
+          <tr>
+            <th class="px-4 py-4 w-1/3">Nome da Seção</th>
+            <th class="px-4 py-4 w-1/3">Ação</th>
+          </tr>
+        </thead>
+
+        <!-- Informações da lista -->
+        <tbody>
+          {% for workplace in workplaces %}
+          <tr class="table-line hover:bg-gray-100 border-b bg-gray-50">
+            <td class="px-4 py-2">{{ workplace.workplace }}</td>
+
+            <!-- Excluir ou editar -->
+            <td class="px-4 py-2 flex flex-row space-x-1 justify-center">
+              <form method="POST">
+                {% csrf_token %} {{ form7 }}
+
+                <input
+                  class="hidden"
+                  type="text"
+                  name="workplace_id"
+                  value="{{ workplace.id }}"
+                />
+
+                <button
+                  class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 toggle-measure"
+                  type="submit"
+                  name="form_type"
+                  value="form8"
+                >
+                  Deletar
+                </button>
+              </form>
+              <a
+                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                href="{% url 'workplace-edit' workplace.id %}"
+              >
+                Editar
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 {% endblock %}

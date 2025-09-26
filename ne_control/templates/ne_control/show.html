@@ -1,5 +1,10 @@
-{% extends 'base.html' %} {% load ne_filters %} {% block title %}
-{{note_ne.cod_ne }} {% endblock %} {% block content %}
+{% extends 'base.html' %}
+
+{% load ne_filters %}
+
+{% block title %} {{note_ne.cod_ne }} {% endblock %}
+
+{% block content %}
 
 <div class="pt-4">
   <div class="grid grid-cols-4 space-x-4">

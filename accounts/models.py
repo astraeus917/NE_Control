@@ -32,7 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(max_length=150, unique=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-    workplace = models.ForeignKey(Workplace, on_delete=models.CASCADE, null=True, blank=True)
+    workplace = models.ForeignKey(Workplace, on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 

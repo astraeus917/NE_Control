@@ -59,4 +59,3 @@ class ChangePasswordForm(forms.Form):
             'placeholder': 'Confirme sua senha de acesso'
         })
     )    
-

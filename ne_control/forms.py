@@ -18,7 +18,3 @@ class ActionTakenForm(forms.Form):
             'class': 'w-full h-20 border border-gray-300 rounded px-3 py-2'
         })
     )
-
-
-
-
