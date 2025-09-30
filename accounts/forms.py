@@ -40,9 +40,10 @@ class RegisterForm(forms.Form):
     workplace = forms.ModelChoiceField(
         queryset=Workplace.objects.all(),
         required=False,
+        
         empty_label="Selecione sua seção",
         widget=forms.Select(attrs={
-            'class': 'w-full px-4 py-2 bg-gray-150 rounded-md text-gray-100'
+            'class': 'w-full px-4 py-2 bg-gray-150 rounded-md text-black'
         })
     )
 
