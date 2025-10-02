@@ -74,6 +74,7 @@
         <thead class="text-gray-700 border-b-2 border-gray-500">
           <tr>
             <th class="px-4 py-4 w-1/2">Código da NE</th>
+            <th class="px-4 py-4 w-1/2">PI da NE</th>
             <th class="px-4 py-4">Usuário que solicitou</th>
             <th class="px-4 py-4">Ação</th>
           </tr>
@@ -85,6 +86,7 @@
 
           <tr class="table-line hover:bg-gray-100 border-b bg-gray-50">
             <td class="px-4 py-2">{{ claim.cod_ne }}</td>
+            <td class="px-4 py-2">{{ claim.pi }}</td>
             <td class="px-4 py-2">{{ claim.user }}</td>
             <!-- Autorizar ou negar a reivindicação -->
             <td class="px-4 py-2 flex flex-row space-x-1 justify-center">

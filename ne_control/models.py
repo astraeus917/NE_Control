@@ -45,6 +45,7 @@ class Claim(models.Model):
     status = models.BooleanField(default=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     cod_ne = models.ForeignKey(NoteNE, on_delete=models.CASCADE)
+    pi = models.CharField(max_length=200, null=True)
 
 
 # class supplier(models.Model): # Fornecedor.

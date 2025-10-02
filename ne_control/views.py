@@ -37,6 +37,7 @@ def list(request):
 
     if request.method == 'POST':
         cod_ne = request.POST.get('cod_ne')
+        pi = request.POST.get('pi')
         btn_action = request.POST.get('btn_action')
         note_ne = NoteNE.objects.get(pk=cod_ne)
 
@@ -63,12 +64,12 @@ def list(request):
                 user = request.user
 
                 # verifica se ja não existe uma solicitação pendente.
-                if Claim.objects.filter(user=user, cod_ne=note_ne, status=True).exists():
+                if Claim.objects.filter(user=user, cod_ne=note_ne, pi=pi, status=True).exists():
                     messages.warning(request, "Aguardando autorização do Gestor!")
                     return redirect('list')
 
                 else:
-                    Claim.objects.create(user=user, cod_ne=note_ne)
+                    Claim.objects.create(user=user, cod_ne=note_ne, pi=pi)
                     messages.success(request, f"{note_ne} Reivindicada com sucesso!")
                     return redirect('list')
 

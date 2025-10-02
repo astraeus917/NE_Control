@@ -68,6 +68,14 @@
                   name="cod_ne"
                   value="{{ note_ne.cod_ne }}"
                 />
+
+                <!-- PI da NE a ser reivindicada -->
+                <input
+                  class="hidden"
+                  type="text"
+                  name="pi"
+                  value="{{ note_ne.pi }}"
+                />
                 
                 {% if user.role == 'admin' %}
                   <button
