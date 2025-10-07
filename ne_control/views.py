@@ -197,7 +197,8 @@ def manage(request):
                 required_fields = ["UG", "PI", "ND", "NE", "DATA", "A LIQUIDAR", "LIQUIDADO A PAGAR", "TOTAL A PAGAR", "PAGO"]
 
                 if not all(row.get(field) and row[field].strip() for field in required_fields):
-                    continue
+                    messages.error(request, "Faltam ou contêm campos errados no .csv!")
+                    return redirect('manage')
 
                 csv_ne_list.append(row['NE']) # Adiciona na lista, para dps comparar e deletar NEs antigas.
 

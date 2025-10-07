@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %}Importador de NE{% endblock %} 
+{% extends 'base.html' %} {% block title %}Importador de NE{% endblock %}
 {% block content %}
 
 <div class="pt-6 flex flex-col space-y-2 items-center w-full">
@@ -9,22 +9,27 @@
         Importar NE do SAG via arquivo .CSV
       </div>
 
+      <p class="text-gray-800">
+        Campos:
+        <span class="bg-blue-500 text-white px-2 py-1 rounded-md mr-2 font-semibold">UG</span>
+        <span class="bg-blue-500 text-white px-2 py-1 rounded-md mr-2 font-semibold">PI</span>
+        <span class="bg-blue-500 text-white px-2 py-1 rounded-md mr-2 font-semibold">ND</span>
+        <span class="bg-blue-500 text-white px-2 py-1 rounded-md mr-2 font-semibold">NE</span>
+        <span class="bg-blue-500 text-white px-2 py-1 rounded-md mr-2 font-semibold">DATA</span>
+        <span class="bg-blue-500 text-white px-2 py-1 rounded-md mr-2 font-semibold">A LIQUIDAR</span>
+        <span class="bg-blue-500 text-white px-2 py-1 rounded-md mr-2 font-semibold">LIQUIDADO A PAGAR</span>
+        <span class="bg-blue-500 text-white px-2 py-1 rounded-md mr-2 font-semibold">TOTAL A PAGAR</span>
+        <span class="bg-blue-500 text-white px-2 py-1 rounded-md font-semibold">PAGO</span>
+      </p>
+
+
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %} {{ form1 }}
         <div class="flex flex-col items-center">
-          <input
-            type="file"
-            name="csv_file"
-            accept=".csv"
-            required
-            class="p-6 border-dashed border-2 border-gray-600 mb-4 text-slate-500 file:font-medium file:text-blue-600 file:bg-inherit file:border-none file:text-blue-600 hover:file:text-blue-700 hover:file:cursor-pointer hover:file:font-bold"
-          />
+          <input type="file" name="csv_file" accept=".csv" required
+            class="p-6 border-dashed border-2 border-gray-600 mb-4 text-slate-500 file:font-medium file:text-blue-600 file:bg-inherit file:border-none file:text-blue-600 hover:file:text-blue-700 hover:file:cursor-pointer hover:file:font-bold" />
 
-          <button
-            class="bg-blue-800 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-            name="form_type"
-            value="form1"
-          >
+          <button class="bg-blue-800 text-white px-6 py-2 rounded-lg hover:bg-blue-700" name="form_type" value="form1">
             Importar Notas de Empenho
           </button>
 
@@ -35,36 +40,21 @@
 
   <!-- Solicitações para reivindicação de NEs -->
   <div class="w-1/2 bg-white rounded-2xl shadow-sm p-6">
-    <button
-      onclick="toggleAccordion('section2')"
-      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center"
-    >
+    <button onclick="toggleAccordion('section2')"
+      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center">
       <span class="flex justify-between w-full content-center">
-        <span class="text-gray-800 content-center"
-          >Solicitações de reivindicação de NEs</span
-        >
+        <span class="text-gray-800 content-center">Solicitações de reivindicação de NEs</span>
         <!-- Contador de solicitações -->
         {% if claim_count > 0 %}
         <span
-          class="text-sm animate-pulse items-end bg-red-600 text-white font-medium rounded-lg px-4 py-2 mr-4 flex flex-row space-x-1"
-        >
+          class="text-sm animate-pulse items-end bg-red-600 text-white font-medium rounded-lg px-4 py-2 mr-4 flex flex-row space-x-1">
           <span class="p-none">{{ claim_count }}</span>
         </span>
         {% endif %}
       </span>
-      <svg
-        id="icon-section2"
-        class="w-5 h-5 transition-transform duration-300 transform"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M19 9l-7 7-7-7"
-        />
+      <svg id="icon-section2" class="w-5 h-5 transition-transform duration-300 transform" fill="none"
+        stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </button>
     <div id="section2" class="hidden">
@@ -91,48 +81,25 @@
             <!-- Autorizar ou negar a reivindicação -->
             <td class="px-4 py-2 flex flex-row space-x-1 justify-center">
               <form method="POST">
-                {% csrf_token %} 
+                {% csrf_token %}
                 {{ form2 }}
                 <!-- Codigo do NE a ser reivindicado -->
-                <input
-                  class="hidden"
-                  type="text"
-                  name="cod_ne"
-                  value="{{ claim.cod_ne }}"
-                />
-                <input
-                  class="hidden"
-                  type="text"
-                  name="claim_id"
-                  value="{{ claim.id }}"
-                />
+                <input class="hidden" type="text" name="cod_ne" value="{{ claim.cod_ne }}" />
+                <input class="hidden" type="text" name="claim_id" value="{{ claim.id }}" />
 
-                <button
-                  class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
-                  type="submit"
-                  name="form_type"
-                  value="form2"
-                >
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                  type="submit" name="form_type" value="form2">
                   Autorizar
                 </button>
               </form>
               <form method="POST">
-                {% csrf_token %} 
+                {% csrf_token %}
                 {{ form3 }}
                 <!-- Codigo do NE a ser reivindicado -->
-                <input
-                  class="hidden"
-                  type="text"
-                  name="claim_id"
-                  value="{{ claim.id }}"
-                />
+                <input class="hidden" type="text" name="claim_id" value="{{ claim.id }}" />
 
-                <button
-                  class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 toggle-measure"
-                  type="submit"
-                  name="form_type"
-                  value="form3"
-                >
+                <button class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 toggle-measure" type="submit"
+                  name="form_type" value="form3">
                   Negar
                 </button>
               </form>
@@ -153,33 +120,20 @@
 
   <!-- Autorizar registro de usuário -->
   <div class="w-1/2 bg-white rounded-2xl shadow-sm p-6">
-    <button
-      onclick="toggleAccordion('section3')"
-      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center"
-    >
+    <button onclick="toggleAccordion('section3')"
+      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center">
       <span class="flex justify-between w-full content-center">
         <!-- Contador de solicitações -->
         Solicitações de acesso ao sistema {% if user_count > 0 %}
         <span
-          class="text-sm animate-pulse items-end bg-red-600 text-white font-medium rounded-lg px-4 py-2 mr-4 flex flex-row space-x-1"
-        >
-        <span> {{ user_count }} </span>
+          class="text-sm animate-pulse items-end bg-red-600 text-white font-medium rounded-lg px-4 py-2 mr-4 flex flex-row space-x-1">
+          <span> {{ user_count }} </span>
         </span>
         {% endif %}
       </span>
-      <svg
-        id="icon-section3"
-        class="w-5 h-5 transition-transform duration-300 transform"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M19 9l-7 7-7-7"
-        />
+      <svg id="icon-section3" class="w-5 h-5 transition-transform duration-300 transform" fill="none"
+        stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </button>
     <div id="section3" class="hidden">
@@ -208,38 +162,20 @@
               <form method="POST">
                 {% csrf_token %} {{ form4 }}
 
-                <input
-                  class="hidden"
-                  type="text"
-                  name="user_id"
-                  value="{{ user.id }}"
-                />
+                <input class="hidden" type="text" name="user_id" value="{{ user.id }}" />
 
-                <button
-                  class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
-                  type="submit"
-                  name="form_type"
-                  value="form4"
-                >
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                  type="submit" name="form_type" value="form4">
                   Autorizar
                 </button>
               </form>
               <form method="POST">
                 {% csrf_token %} {{ form5 }}
 
-                <input
-                  class="hidden"
-                  type="text"
-                  name="user_id"
-                  value="{{ user.id }}"
-                />
+                <input class="hidden" type="text" name="user_id" value="{{ user.id }}" />
 
-                <button
-                  class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 toggle-measure"
-                  type="submit"
-                  name="form_type"
-                  value="form5"
-                >
+                <button class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 toggle-measure" type="submit"
+                  name="form_type" value="form5">
                   Negar
                 </button>
               </form>
@@ -260,43 +196,23 @@
 
   <!-- Adicionar seção no sistema -->
   <div class="w-1/2 bg-white rounded-2xl shadow-sm p-6">
-    <button
-      onclick="toggleAccordion('section4')"
-      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center"
-    >
+    <button onclick="toggleAccordion('section4')"
+      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center">
       <span class="flex justify-between w-full content-center">
         Adicionar nova seção no sistema
       </span>
-      <svg
-          id="icon-section4"
-          class="w-5 h-5 transition-transform duration-300 transform"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M19 9l-7 7-7-7"
-        />
+      <svg id="icon-section4" class="w-5 h-5 transition-transform duration-300 transform" fill="none"
+        stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </button>
     <div id="section4" class="hidden">
       <form method="POST">
         {% csrf_token %}
-        <input
-          class="w-full border border-gray-300 rounded px-3 py-2"
-          placeholder="Digite o nome da seção"
-          type="text"
-          name="workplace"
-        >
-        <button
-          class="bg-blue-600 text-white mt-2 px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
-          type="submit"
-          name="form_type"
-          value="form6"
-        >
+        <input class="w-full border border-gray-300 rounded px-3 py-2" placeholder="Digite o nome da seção" type="text"
+          name="workplace">
+        <button class="bg-blue-600 text-white mt-2 px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure" type="submit"
+          name="form_type" value="form6">
           Salvar
         </button>
       </form>
@@ -305,26 +221,14 @@
 
   <!-- Lista de usuários do sistema -->
   <div class="w-1/2 bg-white rounded-2xl shadow-sm p-6">
-    <button
-      onclick="toggleAccordion('section5')"
-      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center"
-    >
+    <button onclick="toggleAccordion('section5')"
+      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center">
       <span class="flex justify-between w-full content-center">
         Lista de Usuários do sistema
       </span>
-      <svg
-        id="icon-section5"
-        class="w-5 h-5 transition-transform duration-300 transform"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M19 9l-7 7-7-7"
-        />
+      <svg id="icon-section5" class="w-5 h-5 transition-transform duration-300 transform" fill="none"
+        stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </button>
     <div id="section5" class="hidden">
@@ -352,26 +256,15 @@
               <form method="POST">
                 {% csrf_token %} {{ form7 }}
 
-                <input
-                  class="hidden"
-                  type="text"
-                  name="user_id"
-                  value="{{ user.id }}"
-                />
+                <input class="hidden" type="text" name="user_id" value="{{ user.id }}" />
 
-                <button
-                  class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 toggle-measure"
-                  type="submit"
-                  name="form_type"
-                  value="form7"
-                >
+                <button class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 toggle-measure" type="submit"
+                  name="form_type" value="form7">
                   Deletar
                 </button>
               </form>
-              <a
-                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
-                href="{% url 'user-edit' user.id %}"
-              >
+              <a class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                href="{% url 'user-edit' user.id %}">
                 Editar
               </a>
             </td>
@@ -384,26 +277,14 @@
 
   <!-- Lista de seções do sistema -->
   <div class="w-1/2 bg-white rounded-2xl shadow-sm p-6">
-    <button
-      onclick="toggleAccordion('section6')"
-      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center"
-    >
+    <button onclick="toggleAccordion('section6')"
+      class="w-full text-left py-3 px-4 bg-gray-100 hover:bg-gray-200 font-semibold flex justify-between items-center">
       <span class="flex justify-between w-full content-center">
         Lista de Seções do sistema
       </span>
-      <svg
-        id="icon-section6"
-        class="w-5 h-5 transition-transform duration-300 transform"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M19 9l-7 7-7-7"
-        />
+      <svg id="icon-section6" class="w-5 h-5 transition-transform duration-300 transform" fill="none"
+        stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </button>
     <div id="section6" class="hidden">
@@ -427,26 +308,15 @@
               <form method="POST">
                 {% csrf_token %} {{ form7 }}
 
-                <input
-                  class="hidden"
-                  type="text"
-                  name="workplace_id"
-                  value="{{ workplace.id }}"
-                />
+                <input class="hidden" type="text" name="workplace_id" value="{{ workplace.id }}" />
 
-                <button
-                  class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 toggle-measure"
-                  type="submit"
-                  name="form_type"
-                  value="form8"
-                >
+                <button class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 toggle-measure" type="submit"
+                  name="form_type" value="form8">
                   Deletar
                 </button>
               </form>
-              <a
-                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
-                href="{% url 'workplace-edit' workplace.id %}"
-              >
+              <a class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 toggle-measure"
+                href="{% url 'workplace-edit' workplace.id %}">
                 Editar
               </a>
             </td>
