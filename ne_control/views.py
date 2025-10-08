@@ -168,10 +168,6 @@ def manage(request):
         if request.POST.get('form_type') == 'form1' and request.FILES.get("csv_file"):
             csv_file = request.FILES["csv_file"]
 
-            # # Verifica se um arquivo .csv foi anexado para importação.
-            # if not csv_file.name.endswith(".csv"):
-            #     return render(request, "ne_control/import.html", {"error": "Arquivo inválido."})
-
             # Faz a leitura do .csv para importar pro Banco de Dados.
             print(">>> TYPE REQUEST:", type(request))
             decoded_file = csv_file.read().decode("utf-8-sig")
@@ -182,19 +178,11 @@ def manage(request):
             csv_ne_list = []
 
             for row in reader:
-                # Codigo para buscar o responsavel no csv.
-                # responsavel_nome = row["responsavel"].strip()
-
-                # responsavel_name = 'Gestão'
-                # Ele busca o responsavel no Banco de Dados e cria se não existir.
-                # responsavel_obj, _ = Responsible.objects.get_or_create(name=responsavel_name)
-
-                # Atualiza ou cria a NE.
-                # Verificar necessidade de apagar NE se ela estiver fora do csv.
-
-                # Converter a data para salvar no banco de dados.
-
                 required_fields = ["UG", "PI", "ND", "NE", "DATA", "A LIQUIDAR", "LIQUIDADO A PAGAR", "TOTAL A PAGAR", "PAGO"]
+
+                # Pula linhas que não são dados reais de NE (como a linha de totais)
+                if not row.get("NE") or row["NE"].startswith("Σ") or row["NE"].strip() == "NE":
+                    continue
 
                 if not all(row.get(field) and row[field].strip() for field in required_fields):
                     messages.error(request, "Faltam ou contêm campos errados no .csv!")
@@ -205,7 +193,7 @@ def manage(request):
                 data_csv = row['DATA']
                 data_for_db = datetime.strptime(data_csv, "%d/%m/%y").date()
 
-                NoteNE.objects.update_or_create(
+                note, created = NoteNE.objects.update_or_create(
                     cod_ne=row["NE"],
                     defaults={
                         "ug": int(row["UG"]),
@@ -216,16 +204,18 @@ def manage(request):
                         "liquidado_pagar": parse_brl(row["LIQUIDADO A PAGAR"]),
                         "total_pagar": parse_brl(row["TOTAL A PAGAR"]),
                         "pago": parse_brl(row["PAGO"]),
-                        "responsavel": None,
                     }
                 )
+
+                # Se a NE for criada agora, o usuário é Null.
+                if created:
+                    note.responsavel = None
+                    note.save()
 
             NoteNE.objects.exclude(cod_ne__in=csv_ne_list).delete()
 
             messages.success(request, "Importação concluída com sucesso!")
             return redirect('manage')
-
-            # return redirect("list")  # redireciona para a lista de NEs.
 
         # Trata o formulario de confirmação de reivindicação.
         elif request.POST.get('form_type') == 'form2':
